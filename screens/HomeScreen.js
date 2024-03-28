@@ -13,6 +13,7 @@ import {
   ImageBackground,
   FlatList,
 } from "react-native";
+
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -165,7 +166,10 @@ const HomeScreen = () => {
             </View>
           ) : null}
           <View style={styles.container}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("UserMunchies")}
+            >
               <MaterialIcons name="restaurant-menu" size={24} color="white" />
               <Text style={styles.buttonText}>Munchies</Text>
             </TouchableOpacity>
@@ -198,12 +202,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    marginTop: 80, // Increased margin top for better spacing
+    marginTop: 50, // Increased margin top for better spacing
   },
   button: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     paddingVertical: 30, // Increased padding vertically for bigger buttons
     paddingHorizontal: 40,
+
+    borderWidth: 3,
+    borderColor: "black",
 
     borderRadius: 10, // Increased border radius for rounded corners
     flexDirection: "row", // Align icon and text in a row
@@ -223,7 +230,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginLeft: 50,
     marginRight: 50,
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: "black",
     // Adjust border color as needed
   },

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import React, { Fragment, useCallback, useState } from "react";
 import { DataTable } from "react-native-paper";
-import { Box, Button, CloseIcon, Image } from "native-base";
+import { Box, Button, CloseIcon, Image, ScrollView } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -20,6 +20,21 @@ export default function MunchiesItems({ item, refreshAfterDelete }) {
       setShowAction(false);
     }, [])
   );
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === item.images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const handlePreviousImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? item.images.length - 1 : prevIndex - 1
+    );
+  };
+
   const handleEdit = () => {
     navigation.navigate("MunchiesUpdate", { item }); // Pass the item data to MunchiesUpdate screen
   };
@@ -50,48 +65,50 @@ export default function MunchiesItems({ item, refreshAfterDelete }) {
   };
   return (
     <>
-      <DataTable.Row
-        style={{ paddingVertical: 5 }}
-        onLongPress={!showAction ? toggleAction : undefined}
-        onPress={!showAction ? () => console.log("View") : undefined}
-      >
-        <View
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            opacity: showAction ? 0.3 : 1,
-          }}
-        >
-          <DataTable.Cell>
-            <Box>
+      <DataTable.Row style={{ paddingVertical: 5 }}>
+        <Box style={{ flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity onPress={handlePreviousImage}>
+            <MaterialIcons name="keyboard-arrow-left" size={24} color="black" />
+          </TouchableOpacity>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <TouchableOpacity onPress={() => console.log("Image clicked")}>
               <Image
-                alt={item?.images[0]?.name || "image"}
                 source={{
                   uri:
-                    item?.images[0]?.url || "https://via.placeholder.com/300",
+                    item.images[currentImageIndex]?.url ||
+                    "https://via.placeholder.com/300",
                 }}
                 width={50}
                 height={50}
+                alt={item.image || "Image Alt Text"}
+                style={{ marginRight: 10 }}
               />
-            </Box>
-          </DataTable.Cell>
-          <DataTable.Cell>{item.name}</DataTable.Cell>
-          <DataTable.Cell>{item.price}</DataTable.Cell>
-          <DataTable.Cell>{item.description}</DataTable.Cell>
-          <DataTable.Cell>{item.ratings}</DataTable.Cell>
-          {/* Remove this cell as it's not necessary to display all images */}
-          {/* <DataTable.Cell>{item.images}</DataTable.Cell> */}
-          <DataTable.Cell>{item.category}</DataTable.Cell>
-          <DataTable.Cell>
-            <TouchableOpacity onPress={handleEdit}>
-              <MaterialIcons name="edit" size={18} color="blue" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleDelete(item._id)}>
-              <MaterialIcons name="delete" size={18} color="red" />
-            </TouchableOpacity>
-          </DataTable.Cell>
-        </View>
+          </ScrollView>
+          <TouchableOpacity onPress={handleNextImage}>
+            <MaterialIcons
+              name="keyboard-arrow-right"
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+        </Box>
+        <DataTable.Cell>{item.name}</DataTable.Cell>
+        <DataTable.Cell>{item.price}</DataTable.Cell>
+        <DataTable.Cell>{item.description}</DataTable.Cell>
+        <DataTable.Cell>{item.ratings}</DataTable.Cell>
+        {/* Remove this cell as it's not necessary to display all images */}
+        {/* <DataTable.Cell>{item.images}</DataTable.Cell> */}
+        <DataTable.Cell>{item.category}</DataTable.Cell>
+        <DataTable.Cell>
+          <TouchableOpacity onPress={handleEdit}>
+            <MaterialIcons name="edit" size={18} color="blue" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleDelete(item._id)}>
+            <MaterialIcons name="delete" size={18} color="red" />
+          </TouchableOpacity>
+        </DataTable.Cell>
+        {/* </View> */}
 
         {showAction && (
           <Box

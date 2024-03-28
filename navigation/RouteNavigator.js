@@ -17,6 +17,7 @@ import BevviesUpdate from "../screens/Admin/Bevvies/BevviesUpdate";
 import MunchiesScreen from "../screens/Admin/Munchies/MunchiesScreen";
 import MunchiesCreate from "../screens/Admin/Munchies/MunchiesCreate";
 import MunchiesUpdate from "../screens/Admin/Munchies/MunchiesUpdate";
+import UserMunchies from "../screens/Admin/Munchies/UserMunchies";
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -168,6 +169,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="MunchiesUpdate"
           component={MunchiesUpdate}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="UserMunchies"
+          component={UserMunchies}
           options={{ headerShown: false }}
         />
         <Stack.Screen
