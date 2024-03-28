@@ -6,6 +6,8 @@ import BevviesScreen from "../screens/Admin/Bevvies/BevviesScreen";
 import BevviesCreate from "../screens/Admin/Bevvies/BevviesCreate";
 import MunchiesScreen from "../screens/Admin/Munchies/MunchiesScreen";
 import MunchiesCreate from "../screens/Admin/Munchies/MunchiesCreate";
+import InventoryScreen from "../screens/Admin/Inventory/InventoryScreen";
+import InventoryCreate from "../screens/Admin/Inventory/InventoryCreate";
 
 export default function AdminNavigator() {
   const Stack = createNativeStackNavigator();
@@ -67,6 +69,24 @@ export default function AdminNavigator() {
         component={BevviesCreate}
         options={{
           title: "Add New Bevvies",
+          headerShown: true,
+          headerStyle: { height: 40 },
+          headerTitleStyle: { fontSize: 16, marginLeft: -15 },
+        }}
+      />
+
+      <Stack.Screen
+        name="InventoryScreen"
+        component={InventoryScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="InventoryCreate"
+        component={InventoryCreate}
+        options={{
+          title: "Add New Inventory",
           headerShown: true,
           headerStyle: { height: 40 },
           headerTitleStyle: { fontSize: 16, marginLeft: -15 },

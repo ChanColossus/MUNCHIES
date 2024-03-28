@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const UserMunchies = () => {
+const UserBevvies = () => {
   const [munchies, setMunchies] = useState([]);
   const [currentImageIndexes, setCurrentImageIndexes] = useState({});
   const [filteredItems, setFilteredItems] = useState([]);
@@ -79,8 +79,10 @@ const UserMunchies = () => {
     // Fetch munchies data from API
     const fetchMunchies = async () => {
       try {
-        const { data } = await axios.get("http://192.168.0.130:8000/munchies");
-        setMunchies(data.munchies);
+        const { data } = await axios.get("http://192.168.0.130:8000/bevvies");
+        setMunchies(data.bevvies);
+        console.log(data.bevvies.image);
+
         // Initialize current image indexes for each munchies item
         const initialIndexes = {};
         data.munchies.forEach((item) => {
@@ -103,13 +105,12 @@ const UserMunchies = () => {
   }, [munchies]);
 
   const categories = [
-    "Smoked Meats",
-    "Rice",
-    "Sides",
-    "Dessert",
-    "Pastry",
-    "Pizza",
-    "Pasta",
+    "Smoothie",
+    "Juice",
+    "Cocktails",
+    "1 shot",
+    "Coffee",
+    "Chocolates & Non-Coffee",
     "All",
   ];
 
@@ -428,4 +429,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserMunchies;
+export default UserBevvies;

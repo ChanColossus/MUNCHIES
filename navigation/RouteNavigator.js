@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import HomeScreen from "../screens/HomeScreen";
+import CartScreen from "../screens/CartScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -18,6 +19,10 @@ import MunchiesScreen from "../screens/Admin/Munchies/MunchiesScreen";
 import MunchiesCreate from "../screens/Admin/Munchies/MunchiesCreate";
 import MunchiesUpdate from "../screens/Admin/Munchies/MunchiesUpdate";
 import UserMunchies from "../screens/Admin/Munchies/UserMunchies";
+import UserBevvies from "../screens/Admin/Bevvies/UserBevvies";
+import InventoryScreen from "../screens/Admin/Inventory/InventoryScreen";
+import InventoryCreate from "../screens/Admin/Inventory/InventoryCreate";
+import InventoryUpdate from "../screens/Admin/Inventory/InventoryUpdate";
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -58,7 +63,7 @@ const StackNavigator = () => {
         />
         <Tab.Screen
           name="Cart"
-          component={HomeScreen}
+          component={CartScreen}
           options={{
             tabBarLabel: "Cart",
             headerShown: false,
@@ -85,21 +90,6 @@ const StackNavigator = () => {
               ),
           }}
         />
-        {/* <Tab.Screen
-          name="MunchiesCreate"
-          component={MunchiesCreate}
-          options={{
-            tabBarLabel: "MunchiesCreate",
-            tabBarLabelStyle: { color: "black" },
-            headerShown: false,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <MaterialIcons name="restaurant" size={24} color="black" />
-              ) : (
-                <MaterialIcons name="restaurant" size={24} color="black" />
-              ),
-          }}
-        /> */}
         <Tab.Screen
           name="Bevvies"
           component={BevviesScreen}
@@ -115,6 +105,21 @@ const StackNavigator = () => {
               ),
           }}
         />
+        <Tab.Screen
+          name="Inventory"
+          component={InventoryScreen}
+          options={{
+            tabBarLabel: "Inventory",
+            tabBarLabelStyle: { color: "black" },
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <MaterialIcons name="inventory" size={24} color="black" />
+              ) : (
+                <MaterialIcons name="inventory" size={24} color="black" />
+              ),
+          }}
+        />
       </Tab.Navigator>
     );
   }
@@ -127,6 +132,12 @@ const StackNavigator = () => {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="Inventory"
+          component={InventoryScreen}
+          options={{ headerShown: false }}
+        />
+
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
@@ -148,7 +159,7 @@ const StackNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="BevviesScreen"
+          name="Bevvies"
           component={BevviesScreen}
           options={{ headerShown: false }}
         />
@@ -177,8 +188,37 @@ const StackNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="UserBevvies"
+          component={UserBevvies}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="MunchiesScreen"
           component={MunchiesScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="InventoryCreate"
+          component={InventoryCreate}
+          options={{
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "black", // Set header background color
+            },
+            headerTitleStyle: {
+              color: "white", // Set header text color
+            },
+            headerTintColor: "white",
+          }}
+        />
+        <Stack.Screen
+          name="InventoryUpdate"
+          component={InventoryUpdate}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="InventoryScreen"
+          component={InventoryScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

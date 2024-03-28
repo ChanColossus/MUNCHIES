@@ -173,7 +173,10 @@ const HomeScreen = () => {
               <MaterialIcons name="restaurant-menu" size={24} color="white" />
               <Text style={styles.buttonText}>Munchies</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("UserBevvies")}
+            >
               <MaterialIcons name="local-bar" size={24} color="white" />
               <Text style={styles.buttonText}>Bevvies</Text>
             </TouchableOpacity>
