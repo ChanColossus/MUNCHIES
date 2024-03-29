@@ -13,24 +13,24 @@ import {
   ImageBackground,
   FlatList,
 } from "react-native";
+import axios from "axios";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SliderBox } from "react-native-image-slider-box";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 const HomeScreen = () => {
-  const data = [
-    { id: "1", order: "Order 1", details: "Details 1", price: "$10" },
-    { id: "2", order: "Order 2", details: "Details 2", price: "$15" },
-    { id: "3", order: "Order 3", details: "Details 3", price: "$20" },
-  ];
   const renderItem = ({ item }) => (
     <View style={styles.row}>
-      <Text style={styles.cell}>{item.order}</Text>
-      <Text style={styles.cell}>{item.details}</Text>
-      <Text style={styles.cell}>{item.price}</Text>
+      <View style={styles.cell}>
+        {item.products.map((product, index) => (
+          <Text key={index}>{product.name}</Text>
+        ))}
+      </View>
+      <Text style={styles.cell}>Total Price: {item.totalPrice}</Text>
+      <Text style={styles.cell}>Date: {item.createdAt}</Text>
     </View>
   );
   let [fontsLoaded] = useFonts({
@@ -40,21 +40,45 @@ const HomeScreen = () => {
   });
   const navigation = useNavigation();
   const [userName, setUserName] = useState("");
+  const [userOrders, setUserOrders] = useState([]);
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
-      navigation.navigate("Login");
+      await AsyncStorage.removeItem("name");
+      await AsyncStorage.removeItem("userId");
+      await AsyncStorage.removeItem("role");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      });
+      // Call checkLoginStatus from App.js to update the isLoggedIn state
+      // Assuming that onLogout is a prop passed from App.js to HomeScreen
+      if (typeof onLogout === "function") {
+        onLogout();
+      }
     } catch (error) {
       console.log("Error occurred while logging out:", error);
     }
   };
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const userName = await AsyncStorage.getItem("name");
+        const userId = await AsyncStorage.getItem("userId");
+        const role = await AsyncStorage.getItem("role");
         setUserName(userName);
         const keys = await AsyncStorage.getAllKeys();
         console.log("Keys in AsyncStorage:", keys);
+
+        // Use Axios instead of fetch
+        const response = await axios.get(
+          `http://192.168.0.130:8000/orders/${userId}`
+        );
+        setUserOrders(response.data.orders);
+        console.log(userOrders);
+        console.log(role);
       } catch (error) {
         console.log("Error fetching user data:", error);
       }
@@ -70,7 +94,18 @@ const HomeScreen = () => {
     require("../assets/4.jpg"),
     require("../assets/5.jpg"),
   ];
+  const formattedDate = (date) => {
+    const d = new Date(date);
+    const month = d.getMonth() + 1;
+    const day = d.getDate();
+    const year = d.getFullYear();
 
+    // Add leading zeros if necessary
+    const formattedMonth = month < 10 ? `0${month}` : month;
+    const formattedDay = day < 10 ? `0${day}` : day;
+
+    return `${formattedMonth}/${formattedDay}/${year}`;
+  };
   return (
     <SafeAreaView
       style={{
@@ -165,11 +200,17 @@ const HomeScreen = () => {
             </View>
           ) : null}
           <View style={styles.container}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("UserMunchies")}
+            >
               <MaterialIcons name="restaurant-menu" size={24} color="white" />
               <Text style={styles.buttonText}>Munchies</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("UserBevvies")}
+            >
               <MaterialIcons name="local-bar" size={24} color="white" />
               <Text style={styles.buttonText}>Bevvies</Text>
             </TouchableOpacity>
@@ -178,11 +219,30 @@ const HomeScreen = () => {
         <View style={styles.containertable}>
           <FlatList
             style={{ width: "100%" }}
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+            data={userOrders
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort orders by date in descending order
+              .slice(0, 3)} // Slice the latest 3 orders
+            renderItem={({ item }) => (
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  {item.products.map((product, index) => (
+                    <Text key={index}>{product.name}</Text>
+                  ))}
+                </View>
+                <Text style={styles.cell}>{item.totalPrice}</Text>
+                <Text style={styles.cell}>{formattedDate(item.createdAt)}</Text>
+              </View>
+            )}
+            keyExtractor={(item) => item._id} // Use a unique identifier for keys
             ListHeaderComponent={() => (
-              <Text style={styles.header}>Recent Orders</Text>
+              <View>
+                <Text style={styles.header}>Recent Orders</Text>
+                <View style={styles.row}>
+                  <Text style={styles.cell}>Products</Text>
+                  <Text style={styles.cell}>Total Price</Text>
+                  <Text style={styles.cell}>Date</Text>
+                </View>
+              </View>
             )}
           />
         </View>
@@ -198,12 +258,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    marginTop: 80, // Increased margin top for better spacing
+    marginTop: 50, // Increased margin top for better spacing
   },
   button: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     paddingVertical: 30, // Increased padding vertically for bigger buttons
     paddingHorizontal: 40,
+
+    borderWidth: 3,
+    borderColor: "black",
 
     borderRadius: 10, // Increased border radius for rounded corners
     flexDirection: "row", // Align icon and text in a row
@@ -223,7 +286,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginLeft: 50,
     marginRight: 50,
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: "black",
     // Adjust border color as needed
   },

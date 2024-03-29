@@ -47,9 +47,18 @@ const LoginScreen = () => {
       .then((response) => {
         const token = response.data.token;
         const name = response.data.name;
+        const role = response.data.role;
+        console.log(response.data);
+        const userId = response.data.id;
         AsyncStorage.setItem("authToken", token);
         AsyncStorage.setItem("name", name);
-        navigation.replace("Main");
+        AsyncStorage.setItem("userId", userId);
+        AsyncStorage.setItem("role", role);
+        if (role === "admin") {
+          navigation.replace("AdminMain");
+        } else {
+          navigation.replace("Main");
+        }
       })
       .catch((error) => {
         if (error.response) {

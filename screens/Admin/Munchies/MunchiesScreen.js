@@ -97,8 +97,10 @@ const MunchiesScreen = () => {
             </Button>
             <Input
               onChangeText={(value) => handleSearch(value)}
-              width={"100%"}
+              width={"95%"}
               marginTop={30}
+              marginLeft={15}
+              borderRadius={90}
               borderColor={"black"}
               color={"black"}
               placeholder="Search"

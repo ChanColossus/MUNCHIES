@@ -6,8 +6,10 @@ const app = express();
 const port = 8000;
 const cors = require("cors");
 const user = require("./routes/user");
+const order = require("./routes/order");
 const bevvies = require("./routes/bevvies");
 const munchies = require("./routes/munchies");
+const inventory = require("./routes/inventory");
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,3 +41,5 @@ cloudinary.config({
 app.use(user);
 app.use(bevvies);
 app.use(munchies);
+app.use(order);
+app.use(inventory);

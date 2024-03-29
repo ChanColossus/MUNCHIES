@@ -13,25 +13,25 @@ import { DataTable } from "react-native-paper";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
 import { MaterialIcons } from "@expo/vector-icons";
-import BevviesItems from "./Items";
+import InventoryItems from "./Items";
 import { useNavigation } from "@react-navigation/native";
 
 var { width } = Dimensions.get("window");
 
-const BevviesScreen = () => {
+const InventoryScreen = () => {
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
 
-  const getAllBevvies = async () => {
-    const { data } = await axios.get("http://192.168.1.12:8000/bevvies");
-    setItems(data.bevvies);
-    setFilteredItems(data.bevvies); // Set filtered items initially to all items
+  const getAllInventory = async () => {
+    const { data } = await axios.get("http://192.168.0.130:8000/inventory");
+    setItems(data.inventory);
+    setFilteredItems(data.inventory);
   };
 
   useFocusEffect(
     useCallback(() => {
-      getAllBevvies();
+      getAllInventory();
     }, [])
   );
 
@@ -41,7 +41,7 @@ const BevviesScreen = () => {
     setFilteredItems(filteredItems);
   };
   const handleRefreshAfterDelete = async () => {
-    await getAllBevvies(); // Refresh data after deletion
+    await getAllInventory();
   };
   return (
     <SafeAreaView
@@ -78,7 +78,7 @@ const BevviesScreen = () => {
               size={"xs"}
               marginTop={30}
               borderColor={"black"}
-              onPress={() => navigation.navigate("BevviesCreate")}
+              onPress={() => navigation.navigate("InventoryCreate")}
               style={{
                 alignSelf: "center", // Center the button horizontally
                 width: "80%", // Set the width to 80%
@@ -86,13 +86,13 @@ const BevviesScreen = () => {
               }}
             >
               <MaterialIcons
-                name="local-bar"
+                name="inventory"
                 size={24}
                 color="black"
                 style={{ alignSelf: "center", marginRight: 5 }}
               />{" "}
               {/* Adjust styles for icon */}
-              <Text color={"black"}>Add New Bevvies</Text>
+              <Text color={"black"}>Add New Inventory</Text>
             </Button>
             <Input
               onChangeText={(value) => handleSearch(value)}
@@ -115,15 +115,14 @@ const BevviesScreen = () => {
               <DataTable.Title>Images</DataTable.Title>
               <DataTable.Title>Name</DataTable.Title>
               <DataTable.Title>Price</DataTable.Title>
-              <DataTable.Title>Description</DataTable.Title>
-              <DataTable.Title>Ratings</DataTable.Title>
+              <DataTable.Title>Stocks</DataTable.Title>
               <DataTable.Title>Category</DataTable.Title>
               <DataTable.Title>Action</DataTable.Title>
             </DataTable.Header>
             <View style={{ maxHeight: "100%" }}>
               <ScrollView>
                 {filteredItems.map((item, i) => (
-                  <BevviesItems
+                  <InventoryItems
                     item={item}
                     key={i}
                     handleDelete={() => handleDelete(item._id)}
@@ -139,4 +138,4 @@ const BevviesScreen = () => {
   );
 };
 
-export default BevviesScreen;
+export default InventoryScreen;

@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
-export default function BevviesItems({ item, refreshAfterDelete }) {
+export default function InventoryItems({ item, refreshAfterDelete }) {
   const navigation = useNavigation();
 
   const [showAction, setShowAction] = useState(false);
@@ -36,7 +36,7 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
   };
 
   const handleEdit = () => {
-    navigation.navigate("BevviesUpdate", { item }); // Pass the item data to MunchiesUpdate screen
+    navigation.navigate("InventoryUpdate", { item }); // Pass the item data to MunchiesUpdate screen
   };
   const handleDelete = async (itemId) => {
     try {
@@ -47,12 +47,12 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
         },
       };
       const { data } = await axios.delete(
-        `http://192.168.1.12:8000/bevvies/${itemId}`,
+        `http://192.168.0.130:8000/inventory/${itemId}`,
         config
       );
       Alert.alert(
-        "Bevvies Deletion",
-        "You have deleted the Bevvies successfully"
+        "Product Deletion",
+        "You have deleted the product successfully"
       );
       refreshAfterDelete();
 
@@ -95,10 +95,7 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
         </Box>
         <DataTable.Cell>{item.name}</DataTable.Cell>
         <DataTable.Cell>{item.price}</DataTable.Cell>
-        <DataTable.Cell>{item.description}</DataTable.Cell>
-        <DataTable.Cell>{item.ratings}</DataTable.Cell>
-        {/* Remove this cell as it's not necessary to display all images */}
-        {/* <DataTable.Cell>{item.images}</DataTable.Cell> */}
+        <DataTable.Cell>{item.stocks}</DataTable.Cell>
         <DataTable.Cell>{item.category}</DataTable.Cell>
         <DataTable.Cell>
           <TouchableOpacity onPress={handleEdit}>
@@ -108,7 +105,6 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
             <MaterialIcons name="delete" size={18} color="red" />
           </TouchableOpacity>
         </DataTable.Cell>
-        {/* </View> */}
 
         {showAction && (
           <Box
@@ -124,12 +120,7 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
               opacity: 1,
             }}
           >
-            {/* <Button size={'xs'} p={2} onPress={() => handleEdit(item._id)}>
-                            <MaterialCommunityIcons name={'file-edit'} size={18} />
-                        </Button>
-                        <Button onPress={() => deleteCategory(item._id)} colorScheme={'danger'} size={'xs'} p={2}>
-                            <MaterialCommunityIcons name={'delete'} size={18} />
-                        </Button> */}
+            
             <Button
               ml={"auto"}
               size={"xs"}

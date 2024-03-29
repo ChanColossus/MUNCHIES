@@ -109,8 +109,10 @@ exports.Login = async (req, res, next) => {
     //generate a token
     const token = jwt.sign({ userId: user._id }, "gWlkpvmeYqas79948OiH");
     const name = user.name;
+    const id = user._id;
+    const role = user.role;
 
-    res.status(200).json({ token, name });
+    res.status(200).json({ token, name, id, role });
   } catch (error) {
     res.status(500).json({ message: "Login Failed" });
   }
