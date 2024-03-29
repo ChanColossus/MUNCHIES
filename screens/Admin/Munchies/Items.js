@@ -6,11 +6,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
+import {apiUrl} from "../../../ip"
+
 export default function MunchiesItems({ item, refreshAfterDelete }) {
   const navigation = useNavigation();
 
   const [showAction, setShowAction] = useState(false);
-
+  const url = apiUrl
   const toggleAction = () => {
     setShowAction(!showAction);
   };
@@ -47,7 +49,7 @@ export default function MunchiesItems({ item, refreshAfterDelete }) {
         },
       };
       const { data } = await axios.delete(
-        `http://192.168.0.130:8000/munchies/${itemId}`,
+        `${url}/munchies/${itemId}`,
         config
       );
       Alert.alert(

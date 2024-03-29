@@ -21,7 +21,7 @@ import Dropdown from "./DropdownCreate";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { Button } from "native-base";
-
+import {apiUrl} from "../../../ip"
 import { FontAwesome } from "@expo/vector-icons";
 
 const InventoryCreate = () => {
@@ -32,7 +32,7 @@ const InventoryCreate = () => {
   const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false); // State for loader
-
+  const url = apiUrl
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -79,7 +79,7 @@ const InventoryCreate = () => {
     };
     console.log(formData);
     axios
-      .post("http://192.168.0.130:8000/inventory/new", formData, config)
+      .post(`${url}/inventory/new`, formData, config)
       .then((res) => {
         setLoading(false); // Set loading to false when data submission is successful
         Alert.alert("Inventory", "You have added the Inventory successfully");

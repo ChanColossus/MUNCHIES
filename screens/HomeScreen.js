@@ -21,6 +21,7 @@ import { SliderBox } from "react-native-image-slider-box";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
+import {apiUrl} from "../ip"
 const HomeScreen = () => {
   const renderItem = ({ item }) => (
     <View style={styles.row}>
@@ -41,7 +42,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const [userName, setUserName] = useState("");
   const [userOrders, setUserOrders] = useState([]);
-
+  const url = apiUrl
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
@@ -74,7 +75,7 @@ const HomeScreen = () => {
 
         // Use Axios instead of fetch
         const response = await axios.get(
-          `http://192.168.0.130:8000/orders/${userId}`
+          `${url}/orders/${userId}`
         );
         setUserOrders(response.data.orders);
         console.log(userOrders);

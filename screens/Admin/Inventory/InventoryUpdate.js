@@ -20,11 +20,11 @@ import Dropdown from "./Dropdown";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-
+import {apiUrl} from "../../../ip"
 const InventoryUpdate = ({ route }) => {
   const navigation = useNavigation();
   const { item } = route.params; // Retrieve item data from navigation params
-
+  const url = apiUrl
   const [name, setName] = useState(item.name);
   const [price, setPrice] = useState(String(item.price));
   const [stocks, setStock] = useState(String(item.stocks));
@@ -91,7 +91,7 @@ const InventoryUpdate = ({ route }) => {
       };
 
       const response = await axios.put(
-        `http://192.168.0.130:8000/inventory/${item._id}`,
+        `${url}/inventory/${item._id}`,
         formData,
         config
       );

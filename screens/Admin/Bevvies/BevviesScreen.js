@@ -15,16 +15,16 @@ import axios from "axios";
 import { MaterialIcons } from "@expo/vector-icons";
 import BevviesItems from "./Items";
 import { useNavigation } from "@react-navigation/native";
-
+import {apiUrl} from "../../../ip"
 var { width } = Dimensions.get("window");
 
 const BevviesScreen = () => {
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-
+  const url = apiUrl
   const getAllBevvies = async () => {
-    const { data } = await axios.get("http://192.168.0.130:8000/bevvies");
+    const { data } = await axios.get(`${url}/bevvies`);
     setItems(data.bevvies);
     setFilteredItems(data.bevvies); // Set filtered items initially to all items
   };

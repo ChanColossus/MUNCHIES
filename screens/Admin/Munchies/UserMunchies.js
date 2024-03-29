@@ -14,14 +14,14 @@ import axios from "axios";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import {apiUrl} from "../../../ip"
 const UserMunchies = () => {
   const [munchies, setMunchies] = useState([]);
   const [currentImageIndexes, setCurrentImageIndexes] = useState({});
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-
+  const url = apiUrl
   // Function to load cart items from AsyncStorage
   const loadCartItems = async () => {
     try {
@@ -79,7 +79,7 @@ const UserMunchies = () => {
     // Fetch munchies data from API
     const fetchMunchies = async () => {
       try {
-        const { data } = await axios.get("http://192.168.0.130:8000/munchies");
+        const { data } = await axios.get(`${url}/munchies`);
         setMunchies(data.munchies);
         // Initialize current image indexes for each munchies item
         const initialIndexes = {};

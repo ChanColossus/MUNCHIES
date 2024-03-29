@@ -20,14 +20,14 @@ import Dropdown from "./Dropdown";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-
+import {apiUrl} from "../../../ip"
 const MunchiesUpdate = ({ route }) => {
   const navigation = useNavigation();
   const { item } = route.params; // Retrieve item data from navigation params
 
   const [name, setName] = useState(item.name);
   const [price, setPrice] = useState(String(item.price));
-
+  const url = apiUrl
   const [description, setDescription] = useState(item.description);
   const [ratings, setRatings] = useState(String(item.ratings));
   const [images, setImages] = useState(item.images);
@@ -94,7 +94,7 @@ const MunchiesUpdate = ({ route }) => {
       };
 
       const response = await axios.put(
-        `http://192.168.0.130:8000/munchies/${item._id}`,
+        `${url}/munchies/${item._id}`,
         formData,
         config
       );

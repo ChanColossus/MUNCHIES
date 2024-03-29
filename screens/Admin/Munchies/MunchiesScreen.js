@@ -16,16 +16,16 @@ import axios from "axios";
 import { MaterialIcons } from "@expo/vector-icons";
 import MunchiesItems from "./Items";
 import { useNavigation } from "@react-navigation/native";
-
+import {apiUrl} from "../../../ip"
 var { width } = Dimensions.get("window");
 
 const MunchiesScreen = () => {
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-
+  const url = apiUrl
   const getAllMunchies = async () => {
-    const { data } = await axios.get("http://192.168.0.130:8000/munchies");
+    const { data } = await axios.get(`${url}/munchies`);
     setItems(data.munchies);
     setFilteredItems(data.munchies); // Set filtered items initially to all items
   };

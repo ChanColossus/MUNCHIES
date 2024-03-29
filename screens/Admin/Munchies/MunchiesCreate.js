@@ -21,7 +21,7 @@ import Dropdown from "./DropdownCreate";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { Button } from "native-base";
-
+import {apiUrl} from "../../../ip"
 import { FontAwesome } from "@expo/vector-icons";
 
 const MunchiesCreate = () => {
@@ -33,7 +33,7 @@ const MunchiesCreate = () => {
   const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false); // State for loader
-
+  const url = apiUrl
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -81,7 +81,7 @@ const MunchiesCreate = () => {
     };
     console.log(formData);
     axios
-      .post("http://192.168.0.130:8000/munchies/new", formData, config)
+      .post(`${url}/munchies/new`, formData, config)
       .then((res) => {
         setLoading(false); // Set loading to false when data submission is successful
         Alert.alert("Munchies", "You have added the Munchies successfully");

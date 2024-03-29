@@ -15,16 +15,16 @@ import axios from "axios";
 import { MaterialIcons } from "@expo/vector-icons";
 import InventoryItems from "./Items";
 import { useNavigation } from "@react-navigation/native";
-
+import {apiUrl} from "../../../ip"
 var { width } = Dimensions.get("window");
 
 const InventoryScreen = () => {
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-
+  const url = apiUrl
   const getAllInventory = async () => {
-    const { data } = await axios.get("http://192.168.0.130:8000/inventory");
+    const { data } = await axios.get(`${url}/inventory`);
     setItems(data.inventory);
     setFilteredItems(data.inventory);
   };

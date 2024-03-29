@@ -6,9 +6,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
+import {apiUrl} from "../../../ip"
 export default function InventoryItems({ item, refreshAfterDelete }) {
   const navigation = useNavigation();
-
+  const url = apiUrl
   const [showAction, setShowAction] = useState(false);
 
   const toggleAction = () => {
@@ -47,7 +48,7 @@ export default function InventoryItems({ item, refreshAfterDelete }) {
         },
       };
       const { data } = await axios.delete(
-        `http://192.168.0.130:8000/inventory/${itemId}`,
+        `${url}/inventory/${itemId}`,
         config
       );
       Alert.alert(

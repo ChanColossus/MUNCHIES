@@ -23,6 +23,7 @@ import UserBevvies from "../screens/Admin/Bevvies/UserBevvies";
 import InventoryScreen from "../screens/Admin/Inventory/InventoryScreen";
 import InventoryCreate from "../screens/Admin/Inventory/InventoryCreate";
 import InventoryUpdate from "../screens/Admin/Inventory/InventoryUpdate";
+import Dashboard from "../screens/Admin/Dashboard/Dashboard";
 const AdminNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -33,6 +34,20 @@ const AdminNavigator = () => {
         tabBarActiveTintColor="white" // Set active tab label color to white
         tabBarInactiveTintColor="black" // Set inactive tab label color to black
       >
+        <Tab.Screen
+          name="Dashboard"
+          component={Dashboard}
+          options={{
+            tabBarLabel: "Dashboard",
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Entypo name="home" size={24} color="#0F0F0F" />
+              ) : (
+                <AntDesign name="home" size={24} color="black" />
+              ),
+          }}
+        />
         <Tab.Screen
           name="Home"
           component={HomeScreen}
@@ -205,6 +220,7 @@ const AdminNavigator = () => {
           component={BottomTabs}
           options={{ headerShown: false }}
         />
+
         <Stack.Screen
           name="BevviesCreate"
           component={BevviesCreate}

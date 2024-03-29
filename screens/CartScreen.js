@@ -15,10 +15,12 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import {apiUrl} from "../ip"
 const CartScreen = () => {
   const [cartItems, setCartItems] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("onlineBanking");
   const navigation = useNavigation();
+  const url = apiUrl
   // Function to load cart items from AsyncStorage
   const loadCartItems = async () => {
     try {
@@ -73,7 +75,7 @@ const CartScreen = () => {
 
     try {
       // Send a POST request to the backend to checkout
-      const response = await fetch("http://192.168.0.130:8000/checkout", {
+      const response = await fetch(`${url}/checkout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

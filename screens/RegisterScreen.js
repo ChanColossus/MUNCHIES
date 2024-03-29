@@ -15,13 +15,14 @@ import { Entypo } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import {apiUrl} from "../ip"
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-
+  const url = apiUrl
   const handleRegister = () => {
     const user = {
       name: name,
@@ -31,7 +32,7 @@ const RegisterScreen = () => {
 
     //send a post request to the backend API
     axios
-      .post("http://192.168.0.130:8000/register", user)
+      .post(`${url}/register`, user)
       .then((response) => {
         console.log(response);
         setName("");

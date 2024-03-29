@@ -15,13 +15,16 @@ import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import {apiUrl} from "../ip"
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+const url = apiUrl
 
   useEffect(() => {
+    console.log("url:",url)
     const checkLoginStatus = async () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
@@ -43,7 +46,7 @@ const LoginScreen = () => {
     };
 
     axios
-      .post("http://192.168.0.130:8000/login", user)
+      .post(`${url}/login`, user)
       .then((response) => {
         const token = response.data.token;
         const name = response.data.name;
