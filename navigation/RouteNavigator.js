@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { Profiler } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
@@ -17,6 +17,7 @@ import BevviesUpdate from "../screens/Admin/Bevvies/BevviesUpdate";
 import MunchiesScreen from "../screens/Admin/Munchies/MunchiesScreen";
 import MunchiesCreate from "../screens/Admin/Munchies/MunchiesCreate";
 import MunchiesUpdate from "../screens/Admin/Munchies/MunchiesUpdate";
+import Profile from "../screens/User/Profile";
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -43,7 +44,7 @@ const StackNavigator = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={HomeScreen}
+          component={Profile}
           options={{
             tabBarLabel: "Profile",
             headerShown: false,

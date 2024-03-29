@@ -25,7 +25,7 @@ const MunchiesScreen = () => {
   const [filteredItems, setFilteredItems] = useState([]);
 
   const getAllMunchies = async () => {
-    const { data } = await axios.get("http://192.168.0.130:8000/munchies");
+    const { data } = await axios.get("http://192.168.1.12:8000/munchies");
     setItems(data.munchies);
     setFilteredItems(data.munchies); // Set filtered items initially to all items
   };

@@ -81,7 +81,7 @@ const MunchiesCreate = () => {
     };
     console.log(formData);
     axios
-      .post("http://192.168.0.130:8000/munchies/new", formData, config)
+      .post("http://192.168.1.12:8000/munchies/new", formData, config)
       .then((res) => {
         setLoading(false); // Set loading to false when data submission is successful
         Alert.alert("Munchies", "You have added the Munchies successfully");

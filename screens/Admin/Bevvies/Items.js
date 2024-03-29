@@ -32,7 +32,7 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
         },
       };
       const { data } = await axios.delete(
-        `http://192.168.0.130:8000/bevvies/${itemId}`,
+        `http://192.168.1.12:8000/bevvies/${itemId}`,
         config
       );
       Alert.alert(

@@ -94,7 +94,7 @@ const BevviesUpdate = ({ route }) => {
       };
 
       const response = await axios.put(
-        `http://192.168.0.130:8000/bevvies/${item._id}`,
+        `http://192.168.1.12:8000/bevvies/${item._id}`,
         formData,
         config
       );

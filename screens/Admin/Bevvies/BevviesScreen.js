@@ -24,7 +24,7 @@ const BevviesScreen = () => {
   const [filteredItems, setFilteredItems] = useState([]);
 
   const getAllBevvies = async () => {
-    const { data } = await axios.get("http://192.168.0.130:8000/bevvies");
+    const { data } = await axios.get("http://192.168.1.12:8000/bevvies");
     setItems(data.bevvies);
     setFilteredItems(data.bevvies); // Set filtered items initially to all items
   };

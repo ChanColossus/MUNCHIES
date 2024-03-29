@@ -32,7 +32,7 @@ export default function MunchiesItems({ item, refreshAfterDelete }) {
         },
       };
       const { data } = await axios.delete(
-        `http://192.168.0.130:8000/munchies/${itemId}`,
+        `http://192.168.1.12:8000/munchies/${itemId}`,
         config
       );
       Alert.alert(

@@ -81,7 +81,7 @@ const BevviesCreate = () => {
     };
     console.log(formData);
     axios
-      .post("http://192.168.0.130:8000/bevvies/new", formData, config)
+      .post("http://192.168.1.12:8000/bevvies/new", formData, config)
       .then((res) => {
         setLoading(false); // Set loading to false when data submission is successful
         Alert.alert("Bevvies", "You have added the Bevvies successfully");

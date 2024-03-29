@@ -107,11 +107,20 @@ exports.Login = async (req, res, next) => {
     }
 
     //generate a token
-    const token = jwt.sign({ userId: user._id }, secretKey);
+    const token = jwt.sign({ userId: user._id }, "gWlkpvmeYqas79948OiH");
     const name = user.name;
 
     res.status(200).json({ token, name });
   } catch (error) {
     res.status(500).json({ message: "Login Failed" });
   }
+};
+
+exports.userProfile = async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  // console.log(user)
+  res.status(200).json({
+    success: true,
+    user,
+  });
 };
