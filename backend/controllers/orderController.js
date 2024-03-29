@@ -78,3 +78,23 @@ exports.confirmOrder = async (req, res) => {
     res.status(500).json({ error: "Failed to confirm order" });
   }
 };
+
+exports.getOrdersByUser = async (req, res, next) => {
+  try {
+    const orders = await Order.find({ user: req.params.userId });
+    console.log(orders);
+    if (!orders) {
+      return res.status(404).json({
+        success: false,
+        message: "Orders not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

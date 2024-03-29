@@ -59,7 +59,9 @@ const CartScreen = () => {
   );
   const handleCheckout = async () => {
     // Prepare the order data
+    const userId = await AsyncStorage.getItem("userId");
     const orderData = {
+      user: userId,
       products: cartItems.map((item) => ({
         name: item.name,
         quantity: item.quantity,
@@ -83,7 +85,7 @@ const CartScreen = () => {
         // Clear cart items after successful checkout
         await clearCartItems();
         Alert.alert("Cart", "You have successfully placed the order");
-        navigation.navigate("HomeScreen");
+        navigation.replace("Main");
       } else {
         throw new Error("Failed to checkout");
       }

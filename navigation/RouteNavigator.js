@@ -75,7 +75,7 @@ const StackNavigator = () => {
               ),
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Munchies"
           component={MunchiesScreen}
           options={{
@@ -119,7 +119,7 @@ const StackNavigator = () => {
                 <MaterialIcons name="inventory" size={24} color="black" />
               ),
           }}
-        />
+        /> */}
       </Tab.Navigator>
     );
   }
@@ -132,11 +132,11 @@ const StackNavigator = () => {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Inventory"
           component={InventoryScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
 
         <Stack.Screen
           name="Register"
@@ -148,7 +148,7 @@ const StackNavigator = () => {
           component={BottomTabs}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="BevviesCreate"
           component={BevviesCreate}
           options={{ headerShown: false }}
@@ -181,7 +181,7 @@ const StackNavigator = () => {
           name="MunchiesUpdate"
           component={MunchiesUpdate}
           options={{ headerShown: false }}
-        />
+        /> */}
         <Stack.Screen
           name="UserMunchies"
           component={UserMunchies}
@@ -192,7 +192,7 @@ const StackNavigator = () => {
           component={UserBevvies}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="MunchiesScreen"
           component={MunchiesScreen}
           options={{ headerShown: false }}
@@ -220,7 +220,7 @@ const StackNavigator = () => {
           name="InventoryScreen"
           component={InventoryScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

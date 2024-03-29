@@ -16,7 +16,7 @@ import { Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const UserBevvies = () => {
-  const [munchies, setMunchies] = useState([]);
+  const [bevvies, setBevvies] = useState([]);
   const [currentImageIndexes, setCurrentImageIndexes] = useState({});
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -55,7 +55,7 @@ const UserBevvies = () => {
       ...prevIndexes,
       [itemId]:
         (prevIndexes[itemId] + 1) %
-        munchies.find((item) => item._id === itemId).images.length,
+        bevvies.find((item) => item._id === itemId).images.length,
     }));
   };
 
@@ -64,45 +64,43 @@ const UserBevvies = () => {
       ...prevIndexes,
       [itemId]:
         prevIndexes[itemId] === 0
-          ? munchies.find((item) => item._id === itemId).images.length - 1
+          ? bevvies.find((item) => item._id === itemId).images.length - 1
           : prevIndexes[itemId] - 1,
     }));
   };
 
   const handleSearch = (keyword) => {
     const regex = new RegExp(keyword, "i");
-    const filteredItems = munchies.filter((item) => regex.test(item.category));
+    const filteredItems = bevvies.filter((item) => regex.test(item.category));
     setFilteredItems(filteredItems);
   };
 
   useEffect(() => {
     // Fetch munchies data from API
-    const fetchMunchies = async () => {
+    const fetchBevvies = async () => {
       try {
         const { data } = await axios.get("http://192.168.0.130:8000/bevvies");
-        setMunchies(data.bevvies);
-        console.log(data.bevvies.image);
-
+        setBevvies(data.bevvies);
         // Initialize current image indexes for each munchies item
         const initialIndexes = {};
-        data.munchies.forEach((item) => {
+        data.bevvies.forEach((item) => {
           initialIndexes[item._id] = 0;
         });
         setCurrentImageIndexes(initialIndexes);
       } catch (error) {
-        console.error("Error fetching munchies:", error);
+        console.error("Error fetching Bevvies:", error);
       }
     };
 
-    fetchMunchies();
+    fetchBevvies();
   }, []);
 
   useEffect(() => {
     // Initialize filtered items with all munchies initially
-    setFilteredItems(munchies);
+    setFilteredItems(bevvies);
     // Load cart items from AsyncStorage
     loadCartItems();
-  }, [munchies]);
+  }, [bevvies]);
 
   const categories = [
     "Smoothie",
@@ -116,12 +114,10 @@ const UserBevvies = () => {
 
   const handleCategorySelect = (category) => {
     if (category === "All") {
-      setFilteredItems(munchies); // Set all items when "All" category is selected
+      setFilteredItems(bevvies); // Set all items when "All" category is selected
     } else {
       const regex = new RegExp(category, "i");
-      const filteredItems = munchies.filter((item) =>
-        regex.test(item.category)
-      );
+      const filteredItems = bevvies.filter((item) => regex.test(item.category));
       setFilteredItems(filteredItems);
     }
     setSelectedCategory(category);
@@ -240,8 +236,8 @@ const UserBevvies = () => {
 
         <View style={styles.row}>
           {/* Render munchies items */}
-          {filteredItems.map((munchiesItem) => (
-            <View key={munchiesItem._id} style={styles.card}>
+          {filteredItems.map((bevviesItem) => (
+            <View key={bevviesItem._id} style={styles.card}>
               <ImageBackground
                 source={require("../../../assets/pbg.jpg")}
                 style={{ flex: 1, borderRadius: 15, overflow: "hidden" }}
@@ -249,7 +245,7 @@ const UserBevvies = () => {
                 <Box style={styles.box}>
                   <View style={styles.imageContainer}>
                     <TouchableOpacity
-                      onPress={() => handlePreviousImage(munchiesItem._id)}
+                      onPress={() => handlePreviousImage(bevviesItem._id)}
                     >
                       <MaterialIcons
                         name="keyboard-arrow-left"
@@ -267,8 +263,8 @@ const UserBevvies = () => {
                         <Image
                           source={{
                             uri:
-                              munchiesItem.images[
-                                currentImageIndexes[munchiesItem._id]
+                              bevviesItem.images[
+                                currentImageIndexes[bevviesItem._id]
                               ]?.url || "https://via.placeholder.com/300",
                           }}
                           style={styles.image}
@@ -276,7 +272,7 @@ const UserBevvies = () => {
                       </TouchableOpacity>
                     </ScrollView>
                     <TouchableOpacity
-                      onPress={() => handleNextImage(munchiesItem._id)}
+                      onPress={() => handleNextImage(bevviesItem._id)}
                     >
                       <MaterialIcons
                         name="keyboard-arrow-right"
@@ -285,16 +281,16 @@ const UserBevvies = () => {
                       />
                     </TouchableOpacity>
                   </View>
-                  <Text style={styles.name}>{munchiesItem.name}</Text>
+                  <Text style={styles.name}>{bevviesItem.name}</Text>
                   <Text style={styles.description}>
-                    {munchiesItem.description}
+                    {bevviesItem.description}
                   </Text>
-                  <Text style={styles.price}>₱ {munchiesItem.price}</Text>
+                  <Text style={styles.price}>₱ {bevviesItem.price}</Text>
                   {/* Render quantity selector */}
                   <View style={styles.quantityContainer}>
                     <TouchableOpacity
                       onPress={() =>
-                        handleQuantityUpdate(munchiesItem._id, "decrement")
+                        handleQuantityUpdate(bevviesItem._id, "decrement")
                       }
                     >
                       <MaterialIcons
@@ -305,12 +301,12 @@ const UserBevvies = () => {
                       />
                     </TouchableOpacity>
                     <Text style={styles.quantity}>
-                      {cartItems.find((item) => item._id === munchiesItem._id)
+                      {cartItems.find((item) => item._id === bevviesItem._id)
                         ?.quantity || 0}
                     </Text>
                     <TouchableOpacity
                       onPress={() =>
-                        handleQuantityUpdate(munchiesItem._id, "increment")
+                        handleQuantityUpdate(bevviesItem._id, "increment")
                       }
                     >
                       <MaterialIcons
@@ -326,7 +322,7 @@ const UserBevvies = () => {
                     <Button
                       style={styles.button}
                       onPress={() =>
-                        addToCart(munchiesItem, munchiesItem.quantity || 1)
+                        addToCart(bevviesItem, bevviesItem.quantity || 1)
                       }
                     >
                       <Text style={{ color: "white" }}>Add to Cart</Text>

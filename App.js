@@ -1,25 +1,18 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+
+import RoutesNavigator from "./navigation/AdminNavigator";
 import RouteNavigator from "./navigation/RouteNavigator";
 import { PaperProvider } from "react-native-paper";
 import { NativeBaseProvider } from "native-base";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default function App() {
   return (
-    <>
-      <NativeBaseProvider>
-        <PaperProvider>
-          <RouteNavigator />
-        </PaperProvider>
-      </NativeBaseProvider>
-    </>
+    <NativeBaseProvider>
+      <PaperProvider>
+        <RoutesNavigator />
+      </PaperProvider>
+    </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFE4B5",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
