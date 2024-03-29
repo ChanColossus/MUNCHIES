@@ -24,6 +24,7 @@ import InventoryScreen from "../screens/Admin/Inventory/InventoryScreen";
 import InventoryCreate from "../screens/Admin/Inventory/InventoryCreate";
 import InventoryUpdate from "../screens/Admin/Inventory/InventoryUpdate";
 import Dashboard from "../screens/Admin/Dashboard/Dashboard";
+import Profile from "../screens/User/Profile";
 const AdminNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -64,7 +65,7 @@ const AdminNavigator = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={HomeScreen}
+          component={Profile}
           options={{
             tabBarLabel: "Profile",
             headerShown: false,
@@ -161,7 +162,7 @@ const AdminNavigator = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={HomeScreen}
+          component={Profile}
           options={{
             tabBarLabel: "Profile",
             headerShown: false,
