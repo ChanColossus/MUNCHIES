@@ -81,6 +81,7 @@ exports.confirmOrder = async (req, res) => {
 
 exports.getOrdersByUser = async (req, res, next) => {
   try {
+    console.log(req.params.userId)
     const orders = await Order.find({ user: req.params.userId });
     console.log(orders);
     if (!orders) {

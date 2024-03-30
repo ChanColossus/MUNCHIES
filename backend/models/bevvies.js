@@ -17,10 +17,7 @@ const bevviesSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter bevvies description"],
   },
-  ratings: {
-    type: Number,
-    default: 0,
-  },
+  
   images: [
     {
       public_id: {

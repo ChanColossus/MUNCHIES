@@ -17,12 +17,15 @@ import axios from "axios"
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Table, Row } from 'react-native-table-component'; // Import Table and Row
 import { apiUrl } from "../../ip"
-
+import { Picker } from '@react-native-picker/picker';
 const Profile = () => {
   const navigation = useNavigation()
   const [userProfile, setUserProfile] = useState(null);
   const [userOrders, setUserOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [userReviews, setUserReviews] = useState([]);
+  const [userMunchiesReviews, setUserMunchiesReviews] = useState([]);
   const ordersPerPage = 5;
   const url = apiUrl;
 
@@ -45,10 +48,16 @@ const Profile = () => {
             // Fetch orders
             const ordersResponse = await axios.get(`${url}/orders/${response.data.user._id}`, config);
             console.log(ordersResponse.data.orders);
-            
-            // Sort orders by date in descending order
             const sortedOrders = ordersResponse.data.orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setUserOrders(sortedOrders);
+            const reviewsResponse = await axios.get(`${url}/review/${response.data.user._id}`, config);
+            setUserReviews(reviewsResponse.data.reviews);
+            console.log("REVIEWTO!!!!", userReviews)
+            const reviewsMunchiesResponse = await axios.get(`${url}/munchiesreview/${response.data.user._id}`, config);
+            setUserMunchiesReviews(reviewsMunchiesResponse.data.reviews);
+            console.log("REVIEWTO!!!!", userMunchiesReviews)
+            // Sort orders by date in descending order
+            
           } else {
             console.log("Authentication token not found");
           }
@@ -60,7 +69,10 @@ const Profile = () => {
       getProfile();
     }, [])
   );
-
+const handleCategoryChange = (itemValue) => {
+  setSelectedCategory(itemValue);
+  // Here you can filter userReviews based on the selected category if needed
+};
   const formattedDate = (date) => {
     const d = new Date(date);
     const month = d.getMonth() + 1;
@@ -99,9 +111,17 @@ const Profile = () => {
       imageUrl: "https://res.cloudinary.com/dhndcs09a/image/upload/v1711629302/bevvies/ykepq8fhdf5k08qjxbmr.jpg"
     }
   ];
+  const handleReviewNavigation = () => {
+    navigation.navigate('Review');
+  };
   return (
-    <SafeAreaView style={styles.safeAreaView}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+    <SafeAreaView style={{
+      alignSelf: "stretch",
+      paddingTop: Platform.OS === "android" ? 40 : 0,
+      flex: 1,
+      backgroundColor: "#FFE4B5",
+    }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 0 }}>
         <ImageBackground source={require("../../assets/bg.png")} style={styles.backgroundImage}>
           <View style={styles.logoContainer}>
             <Image
@@ -122,7 +142,7 @@ const Profile = () => {
           </Text>
           <View style={styles.infoContainer}>
             <Text style={styles.infoText}>
-              Email: {userProfile ? userProfile.email : ""}
+              {userProfile ? userProfile.email : ""}
             </Text>
           </View>
         </View>
@@ -155,27 +175,50 @@ const Profile = () => {
         </View>
         <View style={styles.createReviewButtonContainer}>
         <View style={styles.paginationButton}>
-          <Button title="Create Review" color="#000" onPress={"navigateToReviewScreen"} />
+          <Button title="Create Review" color="#000" onPress={handleReviewNavigation} />
           </View>
         </View>
         <View style={styles.recentReviewsContainer}>
-          <Text style={styles.recentReviewsHeader}>Recent Reviews</Text>
-          {recentReviews.map((review, index) => (
-            <View key={index} style={styles.reviewItem}>
-              <View style={styles.reviewHeader}>
-                <Text style={styles.reviewProductName}>{review.productName}</Text>
-                <Text style={styles.reviewDate}>{review.date}</Text>
-                <Text style={styles.reviewComment}>{review.comment}</Text>
-              </View>
-              
-              
-             
-    <Image source={{ uri: review.imageUrl }} style={styles.reviewImage} />
+  <Text style={styles.recentReviewsHeader}>Recent Reviews</Text>
+  {/* Picker for selecting category */}
+  <View style={styles.pickerContainer}>
+    <Picker
+      selectedValue={selectedCategory}
+      style={styles.picker}
+      onValueChange={(value) => handleCategoryChange(value)}
+    >
   
-            </View>
-            
-          ))}
+      {selectedCategory ? null : <Picker.Item label="Select Category" value="" />}
+      <Picker.Item label="Bevvies" value="Bevvies" />
+      <Picker.Item label="Munchies" value="Munchies" />
+    </Picker>
+  </View>
+  {/* Display reviews based on the selected category */}
+  {userReviews.map((review, index) => (
+    selectedCategory === 'Bevvies' && (
+      <View key={index} style={styles.reviewItem}>
+        <View style={styles.reviewHeader}>
+          <Text style={styles.reviewProductName}>{review.Bevvies && review.Bevvies.name}</Text>
+          <Text style={styles.reviewDate}>{review.rating}</Text>
+          <Text style={styles.reviewComment}>{review.comment}</Text>
         </View>
+      </View>
+    )
+  ))}
+  {userMunchiesReviews.map((Mreview, index) => (
+    selectedCategory === 'Munchies' && (
+      <View key={index} style={styles.reviewItem}>
+        <View style={styles.reviewHeader}>
+          <Text style={styles.reviewProductName}>{Mreview.Munchies && Mreview.Munchies.name}</Text>
+          <Text style={styles.reviewDate}>{Mreview.rating}</Text>
+          <Text style={styles.reviewComment}>{Mreview.comment}</Text>
+        </View>
+      </View>
+    )
+  ))}
+</View>
+
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -200,6 +243,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     alignSelf:"center"
+  },
+  pickerContainer: {
+   
+    borderWidth: 2,
+    borderRadius: 10,
+    width:"60%",
+    alignSelf:"center",
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  picker: {
+    height: 50,
+    width: '90%',
   },
   reviewItem: {
     marginBottom: 10,

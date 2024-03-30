@@ -97,7 +97,7 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
         <DataTable.Cell>{item.name}</DataTable.Cell>
         <DataTable.Cell>{item.price}</DataTable.Cell>
         <DataTable.Cell>{item.description}</DataTable.Cell>
-        <DataTable.Cell>{item.ratings}</DataTable.Cell>
+   
         {/* Remove this cell as it's not necessary to display all images */}
         {/* <DataTable.Cell>{item.images}</DataTable.Cell> */}
         <DataTable.Cell>{item.category}</DataTable.Cell>

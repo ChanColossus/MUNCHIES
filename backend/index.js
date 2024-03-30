@@ -10,6 +10,8 @@ const order = require("./routes/order");
 const bevvies = require("./routes/bevvies");
 const munchies = require("./routes/munchies");
 const inventory = require("./routes/inventory");
+const review = require("./routes/review");
+const munchiesrev = require("./routes/munchiesreview")
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -43,3 +45,6 @@ app.use(bevvies);
 app.use(munchies);
 app.use(order);
 app.use(inventory);
+app.use(review);
+app.use(munchiesrev);
+

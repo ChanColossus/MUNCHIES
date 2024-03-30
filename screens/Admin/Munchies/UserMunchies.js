@@ -330,7 +330,11 @@ const UserMunchies = () => {
                     >
                       <Text style={{ color: "white" }}>Add to Cart</Text>
                     </Button>
+                    
                   </Box>
+                  <Text style={styles.description}>
+                    Click image to see reviews
+                  </Text>
                 </Box>
               </ImageBackground>
             </View>

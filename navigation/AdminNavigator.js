@@ -25,6 +25,7 @@ import InventoryCreate from "../screens/Admin/Inventory/InventoryCreate";
 import InventoryUpdate from "../screens/Admin/Inventory/InventoryUpdate";
 import Dashboard from "../screens/Admin/Dashboard/Dashboard";
 import Profile from "../screens/User/Profile";
+import Review from "../screens/CreateReview";
 const AdminNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -205,7 +206,16 @@ const AdminNavigator = () => {
           component={InventoryScreen}
           options={{ headerShown: false }}
         />
-
+        <Stack.Screen
+          name="Review"
+          component={Review}
+          options={{ headerShown: false }}
+        />
+<Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Register"
           component={RegisterScreen}

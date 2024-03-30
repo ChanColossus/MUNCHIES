@@ -17,10 +17,7 @@ const munchiesSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please enter munchies description']
     },
-    ratings: {
-        type: Number,
-        default: 0
-    },
+    
     images: [
         {
             public_id: {

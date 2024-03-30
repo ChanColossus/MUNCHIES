@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   categoryButton: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 5,
     margin: 5,
     backgroundColor: "black",

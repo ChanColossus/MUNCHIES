@@ -62,7 +62,7 @@ const MunchiesCreate = () => {
     formData.append("name", name);
     formData.append("price", price);
     formData.append("description", description);
-    formData.append("ratings", ratings);
+
     formData.append("category", category);
 
     images.forEach((image, index) => {
@@ -88,7 +88,7 @@ const MunchiesCreate = () => {
         setName("");
         setPrice("");
         setDescription("");
-        setRatings("");
+    
         setImages([]);
         setCategory("");
         navigation.dispatch(CommonActions.navigate("Munchies"));
@@ -151,15 +151,7 @@ const MunchiesCreate = () => {
           placeholder="Description"
         />
 
-        <Text style={styles.heading}>Ratings</Text>
-        <TextInput
-          value={ratings}
-          style={styles.input}
-          onChangeText={(text) => setRatings(text)}
-          placeholder="Ratings"
-          keyboardType="numeric" // Set keyboardType to numeric
-        />
-
+        
         <View style={styles.inputContainer}>
           <Text style={styles.heading}>Category</Text>
           <Dropdown onValueChange={handleCategoryChange} />

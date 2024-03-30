@@ -116,7 +116,7 @@ const BevviesScreen = () => {
               <DataTable.Title>Name</DataTable.Title>
               <DataTable.Title>Price</DataTable.Title>
               <DataTable.Title>Description</DataTable.Title>
-              <DataTable.Title>Ratings</DataTable.Title>
+        
               <DataTable.Title>Category</DataTable.Title>
               <DataTable.Title>Action</DataTable.Title>
             </DataTable.Header>

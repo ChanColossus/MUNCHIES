@@ -67,7 +67,7 @@ const MunchiesUpdate = ({ route }) => {
       formData.append("name", name);
       formData.append("price", price);
       formData.append("description", description);
-      formData.append("ratings", ratings);
+
       formData.append("category", category);
       images.forEach((image, index) => {
         if (image.url) {
@@ -159,13 +159,7 @@ const MunchiesUpdate = ({ route }) => {
           placeholder="Description"
           style={styles.input}
         />
-        <Text style={styles.heading}>Ratings</Text>
-        <TextInput
-          value={ratings}
-          onChangeText={(text) => setRatings(text)}
-          placeholder="Ratings"
-          style={styles.input}
-        />
+       
         <Text style={styles.heading}>Category</Text>
         <Dropdown
           item={item}
