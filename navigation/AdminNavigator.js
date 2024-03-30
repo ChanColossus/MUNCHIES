@@ -25,6 +25,7 @@ import InventoryScreen from "../screens/Admin/Inventory/InventoryScreen";
 import InventoryCreate from "../screens/Admin/Inventory/InventoryCreate";
 import InventoryUpdate from "../screens/Admin/Inventory/InventoryUpdate";
 import Dashboard from "../screens/Admin/Dashboard/Dashboard";
+import Orders from "../screens/Admin/Dashboard/Orders";
 import Profile from "../screens/User/Profile";
 import Review from "../screens/CreateReview";
 import MunchiesReviews from "../screens/Admin/Munchies/Review"
@@ -48,6 +49,20 @@ const AdminNavigator = () => {
           component={Dashboard}
           options={{
             tabBarLabel: "Dashboard",
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Entypo name="home" size={24} color="#0F0F0F" />
+              ) : (
+                <AntDesign name="home" size={24} color="black" />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="Orders"
+          component={Orders}
+          options={{
+            tabBarLabel: "Orders",
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (

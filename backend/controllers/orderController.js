@@ -99,3 +99,61 @@ exports.getOrdersByUser = async (req, res, next) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+exports.getOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find(); // Fetch all orders from the database
+
+    res.status(200).json({
+      success: true,
+      data: orders,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch orders",
+      error: error.message,
+    });
+  }
+};
+
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    // Extract the order ID from the request parameters
+    const { orderId } = req.params;
+    console.log(orderId)
+    // Find the order by ID
+    const order = await Order.findById(orderId);
+
+    // If the order is not found, return 404 Not Found
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Update the status of the order to true
+    order.status = true;
+
+    // Save the updated order
+    await order.save();
+
+    // Return a success response
+    return res.status(200).json({ message: 'Order status updated successfully', order });
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+exports.deleteOrder = async (req, res) => {
+  try {
+    console.log(req.params)
+    const order = await Order.findByIdAndDelete(req.params.orderId);
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Order not found' });
+    }
+    res.status(200).json({ success: true, data: {} });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
