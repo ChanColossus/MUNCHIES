@@ -18,9 +18,11 @@ const MunchiesReviewsScreen = ({ route }) => {
                 setReviews(response.data.reviews);
 
                 // Compute average rating
-                const totalRatings = response.data.reviews.reduce((acc, review) => acc + review.rating, 0);
-                const avgRating = totalRatings / response.data.reviews.length;
-                setAverageRating(avgRating.toFixed(1)); // Round to 1 decimal place
+                if (response.data.reviews.length > 0) {
+                    const totalRatings = response.data.reviews.reduce((acc, review) => acc + review.rating, 0);
+                    const avgRating = totalRatings / response.data.reviews.length;
+                    setAverageRating(avgRating.toFixed(1));
+                } // Round to 1 decimal place
             } catch (error) {
                 console.error('Error fetching reviews:', error.message);
             }
@@ -97,12 +99,12 @@ const MunchiesReviewsScreen = ({ route }) => {
                                         <View>{renderStars(item.rating)}</View>
                                     </View>
                                     {/* Assuming images is an array, and we want to display the first image */}
-                                    {item.Munchies.images.length > 0 && (
+                                    
                                         <Image
                                             source={{ uri: item.Munchies.images[0].url }}
                                             style={styles.image}
                                         />
-                                    )}
+                                   
                                 </View>
                             )}
                         />

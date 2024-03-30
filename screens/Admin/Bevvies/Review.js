@@ -18,9 +18,11 @@ const BevviesReviewsScreen = ({ route }) => {
         setReviews(response.data.breview);
 
         // Compute average rating
+        if (response.data.breview.length > 0) {
         const totalRatings = response.data.breview.reduce((acc, review) => acc + review.rating, 0);
         const avgRating = totalRatings / response.data.breview.length;
         setAverageRating(avgRating.toFixed(1)); // Round to 1 decimal place
+        }
       } catch (error) {
         console.error('Error fetching reviews:', error.message);
       }
@@ -97,12 +99,12 @@ const BevviesReviewsScreen = ({ route }) => {
                     <View>{renderStars(item.rating)}</View>
                   </View>
                   {/* Assuming images is an array, and we want to display the first image */}
-                  {item.Bevvies.images.length > 0 && (
+                 
                     <Image
                       source={{ uri: item.Bevvies.images[0].url }}
                       style={styles.image}
                     />
-                  )}
+                 
                 </View>
               )}
             />

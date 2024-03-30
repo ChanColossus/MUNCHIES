@@ -31,8 +31,9 @@ const HomeScreen = () => {
           <Text key={index}>{product.name}</Text>
         ))}
       </View>
-      <Text style={styles.cell}>Total Price: {item.totalPrice}</Text>
-      <Text style={styles.cell}>Date: {item.createdAt}</Text>
+      <Text style={styles.cell}>{item.totalPrice}</Text>
+      <Text style={styles.cell}>{formattedDate(item.createdAt)}</Text>
+
     </View>
   );
   const navigation = useNavigation();
