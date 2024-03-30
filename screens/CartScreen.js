@@ -11,16 +11,22 @@ import {
   ImageBackground,
   Image,
   Alert,
+  Pressable,
+  Animated,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import {apiUrl} from "../ip"
+import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 const CartScreen = () => {
   const [cartItems, setCartItems] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("onlineBanking");
   const navigation = useNavigation();
   const url = apiUrl
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [translateX] = useState(new Animated.Value(0));
   // Function to load cart items from AsyncStorage
   const loadCartItems = async () => {
     try {
@@ -96,6 +102,32 @@ const CartScreen = () => {
       alert("Failed to place order. Please try again later.");
     }
   };
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+  const closeDrawer = () => {
+    // Assuming you have a state variable to track the drawer state, 
+    // set it to false to close the drawer.
+    setIsDrawerOpen(false);
+  };
+  const drawerStyles = {
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    width: 200,
+    zIndex: 2,
+  };
+  const navigateToScreen = (screenName) => {
+    navigation.navigate(screenName);
+    closeDrawer();
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -106,6 +138,19 @@ const CartScreen = () => {
       }}
     >
       <ScrollView contentContainerStyle={{ paddingHorizontal: 0 }}>
+      <View
+            style={{
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              padding: 10,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start", // Align items to the right
+            }}
+          >
+            <TouchableOpacity style={styles.menuButton} onPress={toggleDrawer}>
+      <Entypo name="menu" size={24} color="white" />
+    </TouchableOpacity> 
+            </View>
         <ImageBackground
           source={require("../assets/bg.png")}
           style={{ flex: 1 }}
@@ -209,6 +254,77 @@ const CartScreen = () => {
           )}
         </View>
       </ScrollView>
+      <Animated.View
+  style={[
+    drawerStyles,
+    {
+      transform: [{ translateX }], // Apply translation animation
+      display: isDrawerOpen ? "flex" : "none", 
+      backgroundColor: "#4c4436",
+       // Hide/show the drawer
+    },
+  ]}
+>
+<View style={styles.overlay}>
+  {/* Close Drawer Button */}
+  <Pressable
+    style={{
+      position: "absolute",
+      top: 50,
+      left: 0,
+      flexDirection: "row",
+      alignItems: "center",
+    }}
+    onPress={toggleDrawer}
+  >
+    <Text style={{ color: "white", fontSize: 16 }}>Close Drawer</Text>
+    <AntDesign name="close" size={24} color="white" style={{ marginLeft: 80 }} />
+  </Pressable>
+  
+  </View>
+  <View>
+    
+  </View>
+  <ImageBackground
+            source={require("../assets/bg.png")}
+            style={{ flex: 1, position: 'absolute',
+            top: 85,
+            left: 0,
+            right: 0,
+          height: 119 }}
+          >
+           
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 10,
+              }}
+            >
+              {/* <Image
+                style={{ width: 100, height: 100, marginRight: 0 }} // Adjust size as needed
+                source={require("../assets/logo.png")}
+              /> */}
+            </View>
+          </ImageBackground>
+  {/* Navigation Items */}
+  <View style={styles.drawerItemContainer}>
+    <TouchableOpacity onPress={() => navigateToScreen('Home')}>
+      <Text style={styles.drawerItem}>Home</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigateToScreen('Cart')}>
+      <Text style={styles.drawerItem}>Cart</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigateToScreen('Profile')}>
+      <Text style={styles.drawerItem}>Profile</Text>
+    </TouchableOpacity>
+  </View>
+
+  
+
+
+</Animated.View>
     </SafeAreaView>
   );
 };
@@ -218,6 +334,30 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#FFE4B5",
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 40, // Adjust the height to control how much of the drawer is cut
+    backgroundColor: '#FFE4B5', // Semi-transparent black color
+  },
+  drawerItemContainer: {
+    position: 'absolute',
+    top: 220,
+    left: 0,
+    right: 0,
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
+  drawerItem: {
+    marginTop:10,
+    fontSize: 20,
+    color: 'white',
+    borderBottomWidth: 2,
+    borderBottomColor: 'white',
+    marginBottom:0
   },
   totalContainer: {
     marginTop: 10,

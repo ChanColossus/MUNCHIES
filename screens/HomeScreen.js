@@ -6,22 +6,23 @@ import {
   SafeAreaView,
   Platform,
   ScrollView,
-  TextInput,
-  Pressable,
-  Image,
   TouchableOpacity,
+  Image,
   ImageBackground,
   FlatList,
+  Pressable,
+  Animated,
 } from "react-native";
-import axios from "axios";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SliderBox } from "react-native-image-slider-box";
-import { useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFonts } from "expo-font";
-import {apiUrl} from "../ip"
+import { useNavigation,useIsFocused } from "@react-navigation/native";
+import { useFonts } from 'expo-font';
+import { apiUrl } from "../ip";
+import axios from "axios";
+
 const HomeScreen = () => {
   const renderItem = ({ item }) => (
     <View style={styles.row}>
@@ -34,15 +35,13 @@ const HomeScreen = () => {
       <Text style={styles.cell}>Date: {item.createdAt}</Text>
     </View>
   );
-  let [fontsLoaded] = useFonts({
-    "Roboto-Regular": require("../assets/fonts/Roboto-Black.ttf"),
-    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
-    // Add more variants if necessary (e.g., italic)
-  });
   const navigation = useNavigation();
   const [userName, setUserName] = useState("");
   const [userOrders, setUserOrders] = useState([]);
-  const url = apiUrl
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [translateX] = useState(new Animated.Value(0)); // Define translateX here
+  const url = apiUrl;
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
@@ -61,6 +60,34 @@ const HomeScreen = () => {
     } catch (error) {
       console.log("Error occurred while logging out:", error);
     }
+  };
+  const closeDrawer = () => {
+    // Assuming you have a state variable to track the drawer state, 
+    // set it to false to close the drawer.
+    setIsDrawerOpen(false);
+  };
+  // useEffect(() => {
+  //   // Close the drawer when the screen is focused
+  //   if (isFocused) {
+  //     closeDrawer();
+  //   }
+  // }, [isFocused]);
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+
+  const drawerStyles = {
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    width: 200,
+    zIndex: 2,
   };
 
   useEffect(() => {
@@ -107,6 +134,12 @@ const HomeScreen = () => {
 
     return `${formattedMonth}/${formattedDay}/${year}`;
   };
+  const navigateToScreen = (screenName) => {
+    navigation.navigate(screenName);
+    closeDrawer();
+  };
+
+
   return (
     <SafeAreaView
       style={{
@@ -118,10 +151,39 @@ const HomeScreen = () => {
     >
       <ScrollView contentContainerStyle={{ paddingHorizontal: 0 }}>
         <ScrollView>
+         
+        
+          <View
+            style={{
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              padding: 10,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-end", // Align items to the right
+            }}
+          >
+              <TouchableOpacity style={styles.menuButton} onPress={toggleDrawer}>
+      <Entypo name="menu" size={24} color="white" />
+    </TouchableOpacity> 
+            <Text
+              style={{
+                fontSize: 16,
+                color: "#FFF6E0",
+                marginTop: 0,
+                marginRight: 5,
+              }}
+            >
+              Logout
+            </Text>
+            <Pressable onPress={handleLogout}>
+              <AntDesign name="logout" size={24} color="white" />
+            </Pressable>
+          </View>
           <ImageBackground
             source={require("../assets/bg.png")}
             style={{ flex: 1 }}
           >
+           
             <View
               style={{
                 flexDirection: "row",
@@ -163,30 +225,6 @@ const HomeScreen = () => {
               </View>
             </View>
           </ImageBackground>
-          <View
-            style={{
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-              padding: 10,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-end", // Align items to the right
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                color: "#FFF6E0",
-                marginTop: 0,
-                marginRight: 5,
-              }}
-            >
-              Logout
-            </Text>
-            <Pressable onPress={handleLogout}>
-              <AntDesign name="logout" size={24} color="white" />
-            </Pressable>
-          </View>
-
           <SliderBox
             images={banners}
             autoPlay
@@ -223,17 +261,7 @@ const HomeScreen = () => {
             data={userOrders
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort orders by date in descending order
               .slice(0, 3)} // Slice the latest 3 orders
-            renderItem={({ item }) => (
-              <View style={styles.row}>
-                <View style={styles.cell}>
-                  {item.products.map((product, index) => (
-                    <Text key={index}>{product.name}</Text>
-                  ))}
-                </View>
-                <Text style={styles.cell}>{item.totalPrice}</Text>
-                <Text style={styles.cell}>{formattedDate(item.createdAt)}</Text>
-              </View>
-            )}
+            renderItem={renderItem}
             keyExtractor={(item) => item._id} // Use a unique identifier for keys
             ListHeaderComponent={() => (
               <View>
@@ -248,6 +276,80 @@ const HomeScreen = () => {
           />
         </View>
       </ScrollView>
+      <Animated.View
+  style={[
+    drawerStyles,
+    {
+      transform: [{ translateX }], // Apply translation animation
+      display: isDrawerOpen ? "flex" : "none", 
+      backgroundColor: "#4c4436",
+       // Hide/show the drawer
+    },
+  ]}
+>
+<View style={styles.overlay}>
+  {/* Close Drawer Button */}
+  <Pressable
+    style={{
+      position: "absolute",
+      top: 50,
+      left: 0,
+      flexDirection: "row",
+      alignItems: "center",
+    }}
+    onPress={toggleDrawer}
+  >
+    <Text style={{ color: "white", fontSize: 16 }}>Close Drawer</Text>
+    <AntDesign name="close" size={24} color="white" style={{ marginLeft: 80 }} />
+  </Pressable>
+  
+  </View>
+  <View>
+    
+  </View>
+  <ImageBackground
+            source={require("../assets/bg.png")}
+            style={{ flex: 1, position: 'absolute',
+            top: 85,
+            left: 0,
+            right: 0,
+          height: 123 }}
+          >
+           
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 10,
+              }}
+            >
+              <Image
+                style={{ width: 100, height: 100, marginRight: 0 }} // Adjust size as needed
+                source={require("../assets/logo.png")}
+              />
+            </View>
+          </ImageBackground>
+  {/* Navigation Items */}
+  <View style={styles.drawerItemContainer}>
+    <TouchableOpacity onPress={() => navigateToScreen('Home')}>
+      <Text style={styles.drawerItem}>Home</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigateToScreen('Cart')}>
+      <Text style={styles.drawerItem}>Cart</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigateToScreen('Profile')}>
+      <Text style={styles.drawerItem}>Profile</Text>
+    </TouchableOpacity>
+  </View>
+
+  
+
+
+</Animated.View>
+
+
+
     </SafeAreaView>
   );
 };
@@ -260,6 +362,30 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     marginTop: 50, // Increased margin top for better spacing
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 40, // Adjust the height to control how much of the drawer is cut
+    backgroundColor: '#FFE4B5', // Semi-transparent black color
+  },
+  drawerItemContainer: {
+    position: 'absolute',
+    top: 220,
+    left: 0,
+    right: 0,
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
+  drawerItem: {
+    marginTop:10,
+    fontSize: 20,
+    color: 'white',
+    borderBottomWidth: 2,
+    borderBottomColor: 'white',
+    marginBottom:0
   },
   button: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -279,6 +405,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 10, // Added margin left to create space between icon and text
   },
+  
   containertext: {
     backgroundColor: "#D2B48C",
     borderRadius: 10,
@@ -290,6 +417,14 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "black",
     // Adjust border color as needed
+  },
+  menuButton: {
+    position: 'absolute',
+    left: 0,
+    top: 0, // Adjust top position as needed
+    zIndex: 999, // Adjust z-index as needed
+    paddingHorizontal: 7, // Adjust padding as needed
+    paddingVertical: 9, // Adjust padding as needed
   },
   text: {
     fontSize: 24,

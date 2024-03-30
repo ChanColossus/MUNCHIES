@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import Drawer from "../screens/Drawer";
 import HomeScreen from "../screens/HomeScreen";
 import CartScreen from "../screens/CartScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -28,9 +29,13 @@ import Profile from "../screens/User/Profile";
 import Review from "../screens/CreateReview";
 import MunchiesReviews from "../screens/Admin/Munchies/Review"
 import BevviesReviews from "../screens/Admin/Bevvies/Review"
+
+
 const AdminNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
+
+  
   function BottomTabs() {
     return (
       <Tab.Navigator
@@ -317,8 +322,13 @@ const AdminNavigator = () => {
           component={InventoryUpdate}
           options={{ headerShown: false }}
         />
-       
+       <Stack.Screen
+          name="Drawer"
+          component={Drawer}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
+      {/* <Drawer/> */}
     </NavigationContainer>
   );
 };

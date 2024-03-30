@@ -13,7 +13,8 @@ import {
   Alert,
   Modal,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Animated
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -22,6 +23,8 @@ import { Table, Row } from 'react-native-table-component';
 import { apiUrl } from '../../ip';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 const Profile = () => {
   const navigation = useNavigation();
   const [userProfile, setUserProfile] = useState(null);
@@ -31,7 +34,9 @@ const Profile = () => {
   const [userReviews, setUserReviews] = useState([]);
   const [userMunchiesReviews, setUserMunchiesReviews] = useState([]);
   const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
-  const [editedReview, setEditedReview] = useState({ rating: '', comment: '' }); // State for edited review
+  const [editedReview, setEditedReview] = useState({ rating: '', comment: '' });
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [translateX] = useState(new Animated.Value(0)); // State for edited review
   const ordersPerPage = 5;
   const url = apiUrl;
 
@@ -169,6 +174,11 @@ const Profile = () => {
       </View>
     );
   };
+  const navigateToScreen = (screenName) => {
+    navigation.navigate(screenName);
+    closeDrawer();
+  };
+
   const handleSaveEditedReview = async () => {
     try {
       // Validate edited review data
@@ -218,7 +228,27 @@ const Profile = () => {
   const handleReviewNavigation = () => {
     navigation.navigate('Review');
   };
-
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+  const closeDrawer = () => {
+    // Assuming you have a state variable to track the drawer state, 
+    // set it to false to close the drawer.
+    setIsDrawerOpen(false);
+  };
+  const drawerStyles = {
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    width: 200,
+    zIndex: 2,
+  };
   return (
     <SafeAreaView
       style={{
@@ -229,6 +259,19 @@ const Profile = () => {
       }}
     >
       <ScrollView contentContainerStyle={{ paddingHorizontal: 0 }}>
+      <View
+            style={{
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              padding: 10,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start", // Align items to the right
+            }}
+          >
+            <TouchableOpacity style={styles.menuButton} onPress={toggleDrawer}>
+      <Entypo name="menu" size={24} color="white" />
+    </TouchableOpacity> 
+            </View>
         <ImageBackground source={require('../../assets/bg.png')} style={styles.backgroundImage}>
           <View style={styles.logoContainer}>
             <Image style={styles.logoImage} source={require('../../assets/logo.png')} />
@@ -365,6 +408,77 @@ const Profile = () => {
     </View>
   </View>
 </Modal>
+<Animated.View
+  style={[
+    drawerStyles,
+    {
+      transform: [{ translateX }], // Apply translation animation
+      display: isDrawerOpen ? "flex" : "none", 
+      backgroundColor: "#4c4436",
+       // Hide/show the drawer
+    },
+  ]}
+>
+<View style={styles.overlay}>
+  {/* Close Drawer Button */}
+  <Pressable
+    style={{
+      position: "absolute",
+      top: 50,
+      left: 0,
+      flexDirection: "row",
+      alignItems: "center",
+    }}
+    onPress={toggleDrawer}
+  >
+    <Text style={{ color: "white", fontSize: 16 }}>Close Drawer</Text>
+    <AntDesign name="close" size={24} color="white" style={{ marginLeft: 80 }} />
+  </Pressable>
+  
+  </View>
+  <View>
+    
+  </View>
+  <ImageBackground
+            source={require("../../assets/bg.png")}
+            style={{ flex: 1, position: 'absolute',
+            top: 85,
+            left: 0,
+            right: 0,
+          height: 119 }}
+          >
+           
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 10,
+              }}
+            >
+              {/* <Image
+                style={{ width: 100, height: 100, marginRight: 0 }} // Adjust size as needed
+                source={require("../assets/logo.png")}
+              /> */}
+            </View>
+          </ImageBackground>
+  {/* Navigation Items */}
+  <View style={styles.drawerItemContainer}>
+    <TouchableOpacity onPress={() => navigateToScreen('Home')}>
+      <Text style={styles.drawerItem}>Home</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigateToScreen('Cart')}>
+      <Text style={styles.drawerItem}>Cart</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigateToScreen('Profile')}>
+      <Text style={styles.drawerItem}>Profile</Text>
+    </TouchableOpacity>
+  </View>
+
+  
+
+
+</Animated.View>
     </SafeAreaView>
   );
 };
@@ -378,6 +492,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFE4B5",
     marginTop: 20 // Added margin top
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 40, // Adjust the height to control how much of the drawer is cut
+    backgroundColor: '#FFE4B5', // Semi-transparent black color
+  },
+  drawerItemContainer: {
+    position: 'absolute',
+    top: 220,
+    left: 0,
+    right: 0,
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
+  drawerItem: {
+    marginTop:10,
+    fontSize: 20,
+    color: 'white',
+    borderBottomWidth: 2,
+    borderBottomColor: 'white',
+    marginBottom:0
   },
   recentReviewsContainer: {
     marginTop: 20,
