@@ -63,7 +63,7 @@ const ReviewScreen = () => {
       setRating('');
       setBevvies('');
       Alert.alert("Review", "You have successfully created a review");
-      navigation.replace("Profile");
+      navigation.navigate("Profile");
     } catch (error) {
       console.error('Error submitting bevvies review:', error.message);
     }
@@ -84,7 +84,7 @@ const ReviewScreen = () => {
       setRating('');
       setMunchies('');
       Alert.alert("Review", "You have successfully created a review");
-      navigation.replace("Profile");
+      navigation.navigate("Profile");
     } catch (error) {
       console.error('Error submitting munchies review:', error.message);
     }

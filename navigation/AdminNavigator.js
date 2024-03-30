@@ -26,6 +26,8 @@ import InventoryUpdate from "../screens/Admin/Inventory/InventoryUpdate";
 import Dashboard from "../screens/Admin/Dashboard/Dashboard";
 import Profile from "../screens/User/Profile";
 import Review from "../screens/CreateReview";
+import MunchiesReviews from "../screens/Admin/Munchies/Review"
+import BevviesReviews from "../screens/Admin/Bevvies/Review"
 const AdminNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -131,9 +133,9 @@ const AdminNavigator = () => {
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <MaterialIcons name="inventory" size={24} color="black" />
+                <MaterialIcons name="local-bar" size={24} color="black" />
               ) : (
-                <MaterialIcons name="inventory" size={24} color="black" />
+                <MaterialIcons name="local-bar" size={24} color="black" />
               ),
           }}
         />
@@ -271,14 +273,29 @@ const AdminNavigator = () => {
           component={UserMunchies}
           options={{ headerShown: false }}
         />
+         <Stack.Screen
+          name="MunchiesReviews"
+          component={MunchiesReviews}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="UserBevvies"
           component={UserBevvies}
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="BevviesReviews"
+          component={BevviesReviews}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="MunchiesScreen"
           component={MunchiesScreen}
+          options={{ headerShown: false }}
+        />
+         <Stack.Screen
+          name="InventoryScreen"
+          component={InventoryScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -300,11 +317,7 @@ const AdminNavigator = () => {
           component={InventoryUpdate}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="InventoryScreen"
-          component={InventoryScreen}
-          options={{ headerShown: false }}
-        />
+       
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,5 +1,5 @@
 const Review = require('../models/review'); // Assuming your model file is in the same directory
-const Bevvies = require('../models/bevvies'); 
+
 // Create a new review
 exports.createReview = async (req, res) => {
     try {
@@ -53,22 +53,47 @@ exports.ReviewByUser = async (req, res) => {
   };
 
 
-
-// // Update a review by ID
-// exports.updateReview = async (req, res) => {
-//   try {
-//     const review = await Review.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//       runValidators: true,
-//     });
-//     if (!review) {
-//       return res.status(404).json({ success: false, error: 'Review not found' });
-//     }
-//     res.status(200).json({ success: true, data: review });
-//   } catch (err) {
-//     res.status(500).json({ success: false, error: err.message });
-//   }
-// };
+  exports.ReviewByBevvies = async (req, res) => {
+    const bevviesId = req.params.bevviesId;
+  
+    try {
+      // Query the database to fetch reviews by bevvies ID
+      const breview = await Review.find({ Bevvies: bevviesId })
+        .populate('Bevvies') // Populate the Bevvies field
+        .populate('user');   // Populate the user field
+  
+      res.json({ success: true, breview });
+    } catch (error) {
+      console.error('Error fetching reviews by bevvies ID:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  };
+  exports.deleteBevviesReview = async (req, res) => {
+    try {
+      const review = await Review.findByIdAndDelete(req.params.bevviesId);
+      if (!review) {
+        return res.status(404).json({ success: false, error: 'Review not found' });
+      }
+      res.status(200).json({ success: true, data: {} });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  };
+// Update a review by ID
+exports.updateBevviesReview = async (req, res) => {
+  try {
+    const review = await Review.findByIdAndUpdate(req.params.bevviesId, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!review) {
+      return res.status(404).json({ success: false, error: 'Review not found' });
+    }
+    res.status(200).json({ success: true, data: review });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
 
 // // Delete a review by ID
 // exports.deleteReview = async (req, res) => {

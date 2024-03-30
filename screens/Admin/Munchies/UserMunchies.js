@@ -15,8 +15,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {apiUrl} from "../../../ip"
+import { useNavigation } from "@react-navigation/native";
 const UserMunchies = () => {
   const [munchies, setMunchies] = useState([]);
+  const navigation = useNavigation();
   const [currentImageIndexes, setCurrentImageIndexes] = useState({});
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -180,7 +182,9 @@ const UserMunchies = () => {
     }
     updateQuantity(itemId, newQuantity);
   };
-
+  const handleImageClick = (munchiesId, munchiesName) => {
+    navigation.navigate('MunchiesReviews', { munchiesId, munchiesName });
+  };
   return (
     <SafeAreaView
       style={{
@@ -261,7 +265,7 @@ const UserMunchies = () => {
                       showsHorizontalScrollIndicator={false}
                     >
                       <TouchableOpacity
-                        onPress={() => console.log("Image clicked")}
+                         onPress={() => handleImageClick(munchiesItem._id, munchiesItem.name)}
                       >
                         <Image
                           source={{

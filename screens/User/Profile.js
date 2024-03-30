@@ -1,31 +1,37 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  View, 
-  Text, 
-  ScrollView, 
-  Button, 
-  Image, 
-  StyleSheet, 
-  Pressable, 
-  SafeAreaView, 
-  Platform, 
+import {
+  View,
+  Text,
+  ScrollView,
+  Button,
+  Image,
+  StyleSheet,
+  Pressable,
+  SafeAreaView,
+  Platform,
   ImageBackground,
+  Alert,
+  Modal,
+  TextInput,
+  TouchableOpacity
 } from 'react-native';
-import { Container } from "native-base"
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import axios from "axios"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Table, Row } from 'react-native-table-component'; // Import Table and Row
-import { apiUrl } from "../../ip"
+import { Table, Row } from 'react-native-table-component';
+import { apiUrl } from '../../ip';
 import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
 const Profile = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [userProfile, setUserProfile] = useState(null);
   const [userOrders, setUserOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [userReviews, setUserReviews] = useState([]);
   const [userMunchiesReviews, setUserMunchiesReviews] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
+  const [editedReview, setEditedReview] = useState({ rating: '', comment: '' }); // State for edited review
   const ordersPerPage = 5;
   const url = apiUrl;
 
@@ -33,8 +39,8 @@ const Profile = () => {
     useCallback(() => {
       const getProfile = async () => {
         try {
-          const token = await AsyncStorage.getItem("authToken");
-          console.log(token)
+          const token = await AsyncStorage.getItem('authToken');
+          console.log(token);
           if (token) {
             const config = {
               headers: {
@@ -52,27 +58,28 @@ const Profile = () => {
             setUserOrders(sortedOrders);
             const reviewsResponse = await axios.get(`${url}/review/${response.data.user._id}`, config);
             setUserReviews(reviewsResponse.data.reviews);
-            console.log("REVIEWTO!!!!", userReviews)
+            console.log('REVIEWTO!!!!', userReviews);
             const reviewsMunchiesResponse = await axios.get(`${url}/munchiesreview/${response.data.user._id}`, config);
             setUserMunchiesReviews(reviewsMunchiesResponse.data.reviews);
-            console.log("REVIEWTO!!!!", userMunchiesReviews)
+            console.log('REVIEWTO!!!!', userMunchiesReviews);
             // Sort orders by date in descending order
-            
           } else {
-            console.log("Authentication token not found");
+            console.log('Authentication token not found');
           }
         } catch (error) {
-          console.log("Error fetching profile:", error);
+          console.log('Error fetching profile:', error);
         }
       };
 
       getProfile();
     }, [])
   );
-const handleCategoryChange = (itemValue) => {
-  setSelectedCategory(itemValue);
-  // Here you can filter userReviews based on the selected category if needed
-};
+
+  const handleCategoryChange = (itemValue) => {
+    setSelectedCategory(itemValue);
+    // Here you can filter userReviews based on the selected category if needed
+  };
+
   const formattedDate = (date) => {
     const d = new Date(date);
     const month = d.getMonth() + 1;
@@ -97,56 +104,146 @@ const handleCategoryChange = (itemValue) => {
   const prevPage = () => {
     setCurrentPage(currentPage - 1);
   };
-  const recentReviews = [
-    {
-      productName: "Iced Kape",
-      date: "2024-03-27",
-      comment: "Great product! Really satisfied with my purchase.",
-      imageUrl: "https://res.cloudinary.com/dhndcs09a/image/upload/v1711629299/bevvies/wasqlctnwujtzw1yv6u0.jpg"
-    },
-    {
-      productName: "Cocktail",
-      date: "2024-03-25",
-      comment: "Excellent quality. Highly recommended!",
-      imageUrl: "https://res.cloudinary.com/dhndcs09a/image/upload/v1711629302/bevvies/ykepq8fhdf5k08qjxbmr.jpg"
+  const handleMunchiesDeleteReview = async (reviewId) => {
+    try {
+      // Send a delete request to your backend server
+      const response = await axios.delete(`${url}/munchiesdel/${reviewId}`);
+  
+      // Check if the delete request was successful
+      if (response.status === 200) {
+        console.log(`Review with ID ${reviewId} deleted successfully.`);
+        Alert.alert("Review", "You have successfully deleted the review");
+  
+        // Remove the deleted review from the state array
+        setUserMunchiesReviews(prevReviews => prevReviews.filter(review => review._id !== reviewId));
+        
+        // You can also update your UI or perform any additional actions upon successful deletion
+      } else {
+        console.error('Failed to delete the review.');
+        // Handle error scenarios if needed
+      }
+    } catch (error) {
+      console.error('Error deleting review:', error.message);
+      // Handle error scenarios if needed
     }
-  ];
+  };
+  const handleBevviesDeleteReview = async (reviewId) => {
+    try {
+      // Send a delete request to your backend server
+      const response = await axios.delete(`${url}/bevviesdel/${reviewId}`);
+
+      // Check if the delete request was successful
+      if (response.status === 200) {
+        console.log(`Review with ID ${reviewId} deleted successfully.`);
+        Alert.alert("Review", "You have successfully deleted the review");
+        setUserMunchiesReviews(prevReviews => prevReviews.filter(review => review._id !== reviewId));
+        navigation.replace("Main");
+        // You can also update your UI or perform any additional actions upon successful deletion
+      } else {
+        console.error('Failed to delete the review.');
+        // Handle error scenarios if needed
+      }
+    } catch (error) {
+      console.error('Error deleting review:', error.message);
+      // Handle error scenarios if needed
+    }
+  };
+
+  const handleEditReview = (review) => {
+    // Set the edited review state and open the modal
+    setEditedReview(review);
+    setModalVisible(true);
+  };
+  const renderStars = (rating) => {
+    return (
+      <View style={styles.ratingContainer}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Ionicons
+            key={star}
+            name={rating >= star ? 'star' : 'star-outline'}
+            size={32}
+            color="black"
+            onPress={() => handleRatingSelect(star)}
+          />
+        ))}
+      </View>
+    );
+  };
+  const handleSaveEditedReview = async () => {
+    try {
+      // Validate edited review data
+      if (!editedReview.rating || !editedReview.comment) {
+        Alert.alert('Error', 'Please provide both rating and comment.');
+        return;
+      }
+  
+      // Determine which API endpoint to use based on the type of review
+      let endpoint = '';
+      if ( selectedCategory === 'Munchies') {
+        endpoint = `${url}/munchiesEd/${editedReview._id}`;
+        Alert.alert('Review', 'Sucessfully edited review!');
+      } else if (selectedCategory === 'Bevvies') {
+        endpoint = `${url}/bevviesEd/${editedReview._id}`;
+        Alert.alert('Review', 'Sucessfully edited review!');
+      } else {
+        // Handle invalid type
+        Alert.alert('Error', 'Invalid review type.');
+        return;
+      }
+  
+      // Send updated review data to the server
+      const response = await axios.put(endpoint, {
+        rating: parseFloat(editedReview.rating), // Convert rating to number
+        comment: editedReview.comment,
+      });
+  
+      if (response.status === 200) {
+        Alert.alert('Success', 'Review updated successfully.');
+        // Close the modal
+        setModalVisible(false);
+        // You can also update your UI or perform any additional actions upon successful update
+      } else {
+        Alert.alert('Error', 'Failed to update review.');
+      }
+    } catch (error) {
+      console.error('Error updating review:', error);
+      Alert.alert('Error', 'Failed to update review. Please try again.');
+    }
+  };
+  
+  const handleRatingSelect = (value) => {
+    setEditedReview({...editedReview, rating: value}); // Update the rating value in editedReview state
+  };
+  
   const handleReviewNavigation = () => {
     navigation.navigate('Review');
   };
+
   return (
-    <SafeAreaView style={{
-      alignSelf: "stretch",
-      paddingTop: Platform.OS === "android" ? 40 : 0,
-      flex: 1,
-      backgroundColor: "#FFE4B5",
-    }}>
+    <SafeAreaView
+      style={{
+        alignSelf: 'stretch',
+        paddingTop: Platform.OS === 'android' ? 40 : 0,
+        flex: 1,
+        backgroundColor: '#FFE4B5',
+      }}
+    >
       <ScrollView contentContainerStyle={{ paddingHorizontal: 0 }}>
-        <ImageBackground source={require("../../assets/bg.png")} style={styles.backgroundImage}>
+        <ImageBackground source={require('../../assets/bg.png')} style={styles.backgroundImage}>
           <View style={styles.logoContainer}>
-            <Image
-              style={styles.logoImage}
-              source={require("../../assets/logo.png")}
-            />
+            <Image style={styles.logoImage} source={require('../../assets/logo.png')} />
           </View>
         </ImageBackground>
         <View style={styles.profileContainer}>
           <View style={styles.avatarContainer}>
-            <Image
-              style={styles.avatarImage}
-              source={require("../../assets/defaults.jpg")}
-            />
+            <Image style={styles.avatarImage} source={require('../../assets/defaults.jpg')} />
           </View>
-          <Text style={styles.title}>
-            {userProfile ? userProfile.name : ""}
-          </Text>
+          <Text style={styles.title}>{userProfile ? userProfile.name : ''}</Text>
           <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>
-              {userProfile ? userProfile.email : ""}
-            </Text>
+            <Text style={styles.infoText}>{userProfile ? userProfile.email : ''}</Text>
           </View>
         </View>
-        <Text style={styles.orderHistoryText}>Order History</Text> 
+        <Text style={styles.orderHistoryText}>Order History</Text>
         <View style={styles.orderTableContainer}>
           <Table borderStyle={{ borderWidth: 1, borderColor: 'black' }}>
             <Row data={['Product', 'Date', 'Total Price', 'Status']} style={styles.head} textStyle={styles.text} />
@@ -154,72 +251,120 @@ const handleCategoryChange = (itemValue) => {
               <Row
                 key={index}
                 data={[
-                  item.products.map(product => `${product.name} (${product.quantity})`).join(', '),
-                  formattedDate(item.createdAt), 
-                  item.totalPrice, 
-                  item.status ? 'Done' : 'Pending'
+                  item.products.map((product) => `${product.name} (${product.quantity})`).join(', '),
+                  formattedDate(item.createdAt),
+                  item.totalPrice,
+                  item.status ? 'Done' : 'Pending',
                 ]}
-                style={[styles.row, index%2 && {backgroundColor: '#FFE4B5'}]}
+                style={[styles.row, index % 2 && { backgroundColor: '#FFE4B5' }]}
                 textStyle={styles.text}
               />
             ))}
           </Table>
           <View style={styles.paginationContainer}>
-          <View style={styles.paginationButton}>
-            <Button title="Back" color="#000" disabled={currentPage === 1} onPress={prevPage} />
+            <View style={styles.paginationButton}>
+              <Button title="Back" color="#000" disabled={currentPage === 1} onPress={prevPage} />
+            </View>
+            <View style={styles.paginationButton}>
+              <Button title="Next" color="#000" disabled={indexOfLastOrder >= userOrders.length} onPress={nextPage} />
+            </View>
           </View>
-          <View style={styles.paginationButton}>
-            <Button title="Next" color="#000" disabled={indexOfLastOrder >= userOrders.length} onPress={nextPage} />
-          </View>
-        </View>
         </View>
         <View style={styles.createReviewButtonContainer}>
-        <View style={styles.paginationButton}>
-          <Button title="Create Review" color="#000" onPress={handleReviewNavigation} />
+          <View style={styles.paginationButton}>
+            <Button title="Create Review" color="#000" onPress={handleReviewNavigation} />
           </View>
         </View>
         <View style={styles.recentReviewsContainer}>
-  <Text style={styles.recentReviewsHeader}>Recent Reviews</Text>
-  {/* Picker for selecting category */}
-  <View style={styles.pickerContainer}>
-    <Picker
-      selectedValue={selectedCategory}
-      style={styles.picker}
-      onValueChange={(value) => handleCategoryChange(value)}
-    >
-  
-      {selectedCategory ? null : <Picker.Item label="Select Category" value="" />}
-      <Picker.Item label="Bevvies" value="Bevvies" />
-      <Picker.Item label="Munchies" value="Munchies" />
-    </Picker>
-  </View>
-  {/* Display reviews based on the selected category */}
-  {userReviews.map((review, index) => (
-    selectedCategory === 'Bevvies' && (
-      <View key={index} style={styles.reviewItem}>
-        <View style={styles.reviewHeader}>
-          <Text style={styles.reviewProductName}>{review.Bevvies && review.Bevvies.name}</Text>
-          <Text style={styles.reviewDate}>{review.rating}</Text>
-          <Text style={styles.reviewComment}>{review.comment}</Text>
+          <Text style={styles.recentReviewsHeader}>Recent Reviews</Text>
+          {/* Picker for selecting category */}
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={selectedCategory}
+              style={styles.picker}
+              onValueChange={(value) => handleCategoryChange(value)}
+            >
+              {selectedCategory ? null : <Picker.Item label="Select Category" value="" />}
+              <Picker.Item label="Bevvies" value="Bevvies" />
+              <Picker.Item label="Munchies" value="Munchies" />
+            </Picker>
+          </View>
+          {/* Display reviews based on the selected category */}
+          {userReviews.map((review, index) => (
+            selectedCategory === 'Bevvies' && (
+              <View key={index} style={styles.reviewItem}>
+                <View style={styles.reviewHeader}>
+                  <Text style={styles.reviewProductName}>{review.Bevvies && review.Bevvies.name}</Text>
+                  <Text style={styles.reviewDate}>{review.rating}</Text>
+                  <Text style={styles.reviewComment}>{review.comment}</Text>
+                </View>
+                <View style={[styles.reviewActions, { marginTop: 10 }]}>
+                  <Pressable style={styles.actionButton} onPress={() => handleEditReview(review)}>
+                    <Text style={styles.actionButtonText}>Edit</Text>
+                  </Pressable>
+                  <Pressable style={styles.actionButton} onPress={() => handleBevviesDeleteReview(review._id)}>
+                    <Text style={styles.actionButtonText}>Delete</Text>
+                  </Pressable>
+                </View>
+              </View>
+            )
+          ))}
+          {userMunchiesReviews.map((Mreview, index) => (
+            selectedCategory === 'Munchies' && (
+              <View key={index} style={styles.reviewItem}>
+                <View style={styles.reviewHeader}>
+                  <Text style={styles.reviewProductName}>{Mreview.Munchies && Mreview.Munchies.name}</Text>
+                  <Text style={styles.reviewDate}>{Mreview.rating}</Text>
+                  <Text style={styles.reviewComment}>{Mreview.comment}</Text>
+                </View>
+                <View style={[styles.reviewActions, { marginTop: 10 }]}>
+                  <Pressable style={styles.actionButton} onPress={() => handleEditReview(Mreview)}>
+                    <Text style={styles.actionButtonText}>Edit</Text>
+                  </Pressable>
+                  <Pressable style={styles.actionButton} onPress={() => handleMunchiesDeleteReview(Mreview._id)}>
+                    <Text style={styles.actionButtonText}>Delete</Text>
+                  </Pressable>
+                </View>
+              </View>
+            )
+          ))}
         </View>
-      </View>
-    )
-  ))}
-  {userMunchiesReviews.map((Mreview, index) => (
-    selectedCategory === 'Munchies' && (
-      <View key={index} style={styles.reviewItem}>
-        <View style={styles.reviewHeader}>
-          <Text style={styles.reviewProductName}>{Mreview.Munchies && Mreview.Munchies.name}</Text>
-          <Text style={styles.reviewDate}>{Mreview.rating}</Text>
-          <Text style={styles.reviewComment}>{Mreview.comment}</Text>
-        </View>
-      </View>
-    )
-  ))}
-</View>
-
-
       </ScrollView>
+      {/* Modal for editing review */}
+      <Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => setModalVisible(false)}
+>
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      <Text style={styles.modalTitle}>Edit Review</Text>
+      {renderStars(editedReview.rating)}
+      <TextInput
+        style={[styles.input, { height: 100 }]}
+        value={editedReview.comment}
+        onChangeText={(text) => setEditedReview({ ...editedReview, comment: text })}
+        placeholder="Comment"
+        multiline
+      />
+      <View style={styles.modalButtons}>
+      <TouchableOpacity
+        style={[styles.button, styles.cancelButton]}
+        onPress={() => setModalVisible(false)}
+      >
+        <Text style={styles.buttonText}>Cancel</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, styles.saveButton]}
+        onPress={handleSaveEditedReview}
+      >
+        <Text style={styles.buttonText}>Save</Text>
+      </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+</Modal>
     </SafeAreaView>
   );
 };
@@ -238,11 +383,65 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 20,
   },
+  ratingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  cancelButton: {
+    backgroundColor: 'black',
+  },
+  saveButton: {
+    backgroundColor: 'black',
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  buttonText: {
+    color: 'white', // This color will be applied to both buttons
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   recentReviewsHeader: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
     alignSelf:"center"
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+    
   },
   pickerContainer: {
    
@@ -252,6 +451,21 @@ const styles = StyleSheet.create({
     alignSelf:"center",
     alignItems: 'center',
     marginBottom: 10,
+  },
+  reviewActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 10, // Add some space between the buttons and the review details
+  },
+  actionButton: {
+    backgroundColor: 'black', // Background color for the action buttons
+    paddingHorizontal: 10, // Add some horizontal padding to the buttons
+    paddingVertical: 5, // Add some vertical padding to the buttons
+    borderRadius: 5, // Add border radius to the buttons
+  },
+  actionButtonText: {
+    color: 'white', // Text color for the action button text
   },
   picker: {
     height: 50,
@@ -376,6 +590,10 @@ const styles = StyleSheet.create({
     paddingTop:0,
     backgroundColor: '#FFE4B5',
   },
+  starContainer: {
+    flexDirection: 'row',
+    marginTop: 5,
+},
   head: { height: 40, backgroundColor: '#808B97' },
   text: { margin: 6 },
   row: { flexDirection: 'row', backgroundColor: '#FFF1C1' }

@@ -88,7 +88,7 @@ const InventoryCreate = () => {
         setStock("");
         setImages([]);
         setCategory("");
-        navigation.dispatch(CommonActions.navigate("Inventory"));
+        navigation.navigate("Inventory"); 
       })
       .catch((error) => {
         setLoading(false); // Set loading to false if there's an error

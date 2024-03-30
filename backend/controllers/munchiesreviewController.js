@@ -46,6 +46,21 @@ exports.Review = async (req, res) => {
       res.status(500).json({ success: false, message: 'Internal server error' });
     }
   };
+  exports.ReviewByMunchies = async (req, res) => {
+    const munchiesId = req.params.munchiesId;
+  
+    try {
+      // Query the database to fetch reviews by user ID
+      const reviews = await MunchiesReview.find({ Munchies: munchiesId })
+      .populate('Munchies') // Populate the Munchies field
+      .populate('user');// Assuming 'user' field in Review model references the user ID
+  
+      res.json({ success: true, reviews });
+    } catch (error) {
+      console.error('Error fetching reviews by user ID:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  };
 // Get a single review by ID
 // exports.getReviewById = async (req, res) => {
 //   try {
@@ -59,31 +74,31 @@ exports.Review = async (req, res) => {
 //   }
 // };
 
-// // Update a review by ID
-// exports.updateReview = async (req, res) => {
-//   try {
-//     const review = await Review.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//       runValidators: true,
-//     });
-//     if (!review) {
-//       return res.status(404).json({ success: false, error: 'Review not found' });
-//     }
-//     res.status(200).json({ success: true, data: review });
-//   } catch (err) {
-//     res.status(500).json({ success: false, error: err.message });
-//   }
-// };
+// Update a review by ID
+exports.updateReview = async (req, res) => {
+  try {
+    const review = await MunchiesReview.findByIdAndUpdate(req.params.munchiesId, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!review) {
+      return res.status(404).json({ success: false, error: 'Review not found' });
+    }
+    res.status(200).json({ success: true, data: review });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
 
-// // Delete a review by ID
-// exports.deleteReview = async (req, res) => {
-//   try {
-//     const review = await Review.findByIdAndDelete(req.params.id);
-//     if (!review) {
-//       return res.status(404).json({ success: false, error: 'Review not found' });
-//     }
-//     res.status(200).json({ success: true, data: {} });
-//   } catch (err) {
-//     res.status(500).json({ success: false, error: err.message });
-//   }
-// };
+// Delete a review by ID
+exports.deleteReview = async (req, res) => {
+  try {
+    const review = await MunchiesReview.findByIdAndDelete(req.params.munchiesId);
+    if (!review) {
+      return res.status(404).json({ success: false, error: 'Review not found' });
+    }
+    res.status(200).json({ success: true, data: {} });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};

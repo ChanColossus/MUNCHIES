@@ -15,8 +15,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {apiUrl} from "../../../ip"
+import { useNavigation } from "@react-navigation/native";
 const UserBevvies = () => {
   const [bevvies, setBevvies] = useState([]);
+  const navigation = useNavigation();
   const [currentImageIndexes, setCurrentImageIndexes] = useState({});
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -177,7 +179,9 @@ const UserBevvies = () => {
     }
     updateQuantity(itemId, newQuantity);
   };
-
+  const handleImageClick = (bevviesId, bevviesName) => {
+    navigation.navigate('BevviesReviews', { bevviesId, bevviesName });
+  };
   return (
     <SafeAreaView
       style={{
@@ -258,7 +262,7 @@ const UserBevvies = () => {
                       showsHorizontalScrollIndicator={false}
                     >
                       <TouchableOpacity
-                        onPress={() => console.log("Image clicked")}
+                         onPress={() => handleImageClick(bevviesItem._id, bevviesItem.name)}
                       >
                         <Image
                           source={{
