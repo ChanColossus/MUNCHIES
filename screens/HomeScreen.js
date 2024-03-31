@@ -38,6 +38,7 @@ const HomeScreen = () => {
   );
   const navigation = useNavigation();
   const [userName, setUserName] = useState("");
+  const [role, setUserRole] = useState("");
   const [userOrders, setUserOrders] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [translateX] = useState(new Animated.Value(0)); // Define translateX here
@@ -98,6 +99,7 @@ const HomeScreen = () => {
         const userId = await AsyncStorage.getItem("userId");
         const role = await AsyncStorage.getItem("role");
         setUserName(userName);
+        setUserRole(role);
         const keys = await AsyncStorage.getAllKeys();
         console.log("Keys in AsyncStorage:", keys);
 
@@ -143,6 +145,9 @@ const HomeScreen = () => {
   const handleLocation = async () => {
     navigation.navigate("Location");
   }
+  const handleAdmin = async () => {
+    navigation.navigate("AdminMain");
+  }
   return (
     <SafeAreaView
       style={{
@@ -168,6 +173,16 @@ const HomeScreen = () => {
               <TouchableOpacity style={styles.menuButton} onPress={toggleDrawer}>
       <Entypo name="menu" size={24} color="white" />
     </TouchableOpacity> 
+    {role === 'admin' && (
+            <Pressable onPress={handleAdmin}>
+            <MaterialIcons
+              name="supervisor-account"
+              size={24}
+              color="white"
+              marginRight= {10}
+            />
+          </Pressable>
+          )}
     <Pressable onPress={handleLocation}>
               <MaterialIcons
                 name="pin-drop"
@@ -176,10 +191,13 @@ const HomeScreen = () => {
                 marginRight= {10}
               />
             </Pressable>
+            {role === 'user' && (
             <Pressable onPress={handleLogout}>
               <AntDesign name="logout" size={24} color="white" />
             </Pressable>
+             )}
           </View>
+          
           <ImageBackground
             source={require("../assets/bg.png")}
             style={{ flex: 1, height:124 }}

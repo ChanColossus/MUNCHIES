@@ -101,8 +101,8 @@ exports.getOrdersByUser = async (req, res, next) => {
 };
 exports.getOrders = async (req, res, next) => {
   try {
-    const orders = await Order.find(); // Fetch all orders from the database
-
+    const orders = await Order.find().populate('user');// Fetch all orders from the database
+console.log(orders)
     res.status(200).json({
       success: true,
       data: orders,
@@ -111,7 +111,7 @@ exports.getOrders = async (req, res, next) => {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: "Failed to fetch orders",
+      message: "Failed to fetch ordersss",
       error: error.message,
     });
   }

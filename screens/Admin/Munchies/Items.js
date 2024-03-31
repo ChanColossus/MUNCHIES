@@ -65,9 +65,10 @@ export default function MunchiesItems({ item, refreshAfterDelete }) {
       return { success: false };
     }
   };
+  const cellStyle = { fontSize: 10 };
   return (
     <>
-      <DataTable.Row style={{ paddingVertical: 5 }}>
+      <DataTable.Row style={{ paddingVertical: 5, paddingHorizontal:5,marginLeft:15 }}>
         <Box style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity onPress={handlePreviousImage}>
             <MaterialIcons name="keyboard-arrow-left" size={24} color="black" />
@@ -80,8 +81,8 @@ export default function MunchiesItems({ item, refreshAfterDelete }) {
                     item.images[currentImageIndex]?.url ||
                     "https://via.placeholder.com/300",
                 }}
-                width={50}
-                height={50}
+                width={30}
+                height={30}
                 alt={item.image || "Image Alt Text"}
                 style={{ marginRight: 10 }}
               />
@@ -95,54 +96,26 @@ export default function MunchiesItems({ item, refreshAfterDelete }) {
             />
           </TouchableOpacity>
         </Box>
-        <DataTable.Cell>{item.name}</DataTable.Cell>
-        <DataTable.Cell>{item.price}</DataTable.Cell>
-        <DataTable.Cell>{item.description}</DataTable.Cell>
+        <DataTable.Cell style={{marginLeft:10,marginRight:20}}>{item.name}</DataTable.Cell>
+
+
+
+
      
         {/* Remove this cell as it's not necessary to display all images */}
         {/* <DataTable.Cell>{item.images}</DataTable.Cell> */}
-        <DataTable.Cell>{item.category}</DataTable.Cell>
+        <DataTable.Cell style={{marginRight:20}}>{item.category}</DataTable.Cell>
         <DataTable.Cell>
           <TouchableOpacity onPress={handleEdit}>
-            <MaterialIcons name="edit" size={18} color="blue" />
+            <MaterialIcons name="edit" size={24} color="blue" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleDelete(item._id)}>
-            <MaterialIcons name="delete" size={18} color="red" />
+            <MaterialIcons name="delete" size={24} color="red" />
           </TouchableOpacity>
         </DataTable.Cell>
         {/* </View> */}
 
-        {showAction && (
-          <Box
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: 5,
-              position: "absolute",
-              zIndex: 2,
-              width: "100%",
-              height: "100%",
-              alignItems: "center",
-              opacity: 1,
-            }}
-          >
-            {/* <Button size={'xs'} p={2} onPress={() => handleEdit(item._id)}>
-                            <MaterialCommunityIcons name={'file-edit'} size={18} />
-                        </Button>
-                        <Button onPress={() => deleteCategory(item._id)} colorScheme={'danger'} size={'xs'} p={2}>
-                            <MaterialCommunityIcons name={'delete'} size={18} />
-                        </Button> */}
-            <Button
-              ml={"auto"}
-              size={"xs"}
-              p={2}
-              colorScheme={"danger"}
-              onPress={toggleAction}
-            >
-              <MaterialCommunityIcons name={"close-circle"} size={18} />
-            </Button>
-          </Box>
-        )}
+       
       </DataTable.Row>
     </>
   );

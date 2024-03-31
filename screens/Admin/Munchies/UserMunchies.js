@@ -189,7 +189,7 @@ const UserMunchies = () => {
     <SafeAreaView
       style={{
         alignSelf: "stretch",
-        paddingTop: Platform.OS === "android" ? 40 : 0,
+        paddingTop: Platform.OS === "android" ? 10 : 0,
         flex: 1,
         backgroundColor: "#FFE4B5",
       }}

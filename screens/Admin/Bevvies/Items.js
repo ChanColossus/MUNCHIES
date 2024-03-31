@@ -66,8 +66,8 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
   };
   return (
     <>
-      <DataTable.Row style={{ paddingVertical: 5 }}>
-        <Box style={{ flexDirection: "row", alignItems: "center" }}>
+      <DataTable.Row style={{ paddingVertical: 5, paddingHorizontal:5,marginLeft:20 }}>
+        <Box style={{ flexDirection: "row", alignItems: "center"}}>
           <TouchableOpacity onPress={handlePreviousImage}>
             <MaterialIcons name="keyboard-arrow-left" size={24} color="black" />
           </TouchableOpacity>
@@ -79,8 +79,8 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
                     item.images[currentImageIndex]?.url ||
                     "https://via.placeholder.com/300",
                 }}
-                width={50}
-                height={50}
+                width={30}
+                height={30}
                 alt={item.image || "Image Alt Text"}
                 style={{ marginRight: 10 }}
               />
@@ -94,19 +94,18 @@ export default function BevviesItems({ item, refreshAfterDelete }) {
             />
           </TouchableOpacity>
         </Box>
-        <DataTable.Cell>{item.name}</DataTable.Cell>
-        <DataTable.Cell>{item.price}</DataTable.Cell>
-        <DataTable.Cell>{item.description}</DataTable.Cell>
+        <DataTable.Cell style={{marginLeft:10,marginRight:20}}>{item.name}</DataTable.Cell>
+
    
         {/* Remove this cell as it's not necessary to display all images */}
         {/* <DataTable.Cell>{item.images}</DataTable.Cell> */}
-        <DataTable.Cell>{item.category}</DataTable.Cell>
+        <DataTable.Cell style={{marginRight:40}}>{item.category}</DataTable.Cell>
         <DataTable.Cell>
           <TouchableOpacity onPress={handleEdit}>
-            <MaterialIcons name="edit" size={18} color="blue" />
+            <MaterialIcons name="edit" size={24} color="blue" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleDelete(item._id)}>
-            <MaterialIcons name="delete" size={18} color="red" />
+            <MaterialIcons name="delete" size={24} color="red" />
           </TouchableOpacity>
         </DataTable.Cell>
         {/* </View> */}

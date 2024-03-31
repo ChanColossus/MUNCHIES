@@ -113,13 +113,13 @@ const MunchiesScreen = () => {
           </Box>
           <DataTable style={{}}>
             <DataTable.Header borderColor={"black"}>
-              <DataTable.Title>Images</DataTable.Title>
-              <DataTable.Title>Name</DataTable.Title>
-              <DataTable.Title>Price</DataTable.Title>
-              <DataTable.Title>Description</DataTable.Title>
+              <DataTable.Title>    Images</DataTable.Title>
+              <DataTable.Title>   Name</DataTable.Title>
+          
+
              
-              <DataTable.Title>Category</DataTable.Title>
-              <DataTable.Title>Action</DataTable.Title>
+              <DataTable.Title>    Category</DataTable.Title>
+              <DataTable.Title>      Action</DataTable.Title>
             </DataTable.Header>
             <View style={{ maxHeight: "100%" }}>
               <ScrollView>

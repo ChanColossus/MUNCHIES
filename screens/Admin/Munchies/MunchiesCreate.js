@@ -103,7 +103,7 @@ const MunchiesCreate = () => {
     <SafeAreaView
       style={{
         alignSelf: "stretch",
-        paddingTop: Platform.OS === "android" ? 40 : 0,
+        paddingTop: Platform.OS === "android" ? 10 : 0,
         flex: 1,
         backgroundColor: "#FFE4B5",
       }}
@@ -165,7 +165,7 @@ const MunchiesCreate = () => {
               backgroundColor: "black",
               marginBottom: 10,
               marginTop: 20,
-              marginLeft: 380,
+              alignSelf:"center"
             },
           ]}
         >
@@ -270,7 +270,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 12,
     borderRadius: 25,
-    marginTop: 115,
+    marginTop: 30,
+    marginBottom: 30,
   },
   buttonText: {
     color: "white",

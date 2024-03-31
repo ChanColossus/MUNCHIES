@@ -14,6 +14,7 @@ import {
   Pressable,
   Animated,
 } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
@@ -27,10 +28,14 @@ const CartScreen = () => {
   const url = apiUrl
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [translateX] = useState(new Animated.Value(0));
+  const [role, setUserRole] = useState("");
   // Function to load cart items from AsyncStorage
   const loadCartItems = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("cartItems");
+      const role = await AsyncStorage.getItem("role");
+ 
+        setUserRole(role);
       if (jsonValue !== null) {
         setCartItems(JSON.parse(jsonValue));
       }
@@ -110,6 +115,9 @@ const CartScreen = () => {
     // set it to false to close the drawer.
     setIsDrawerOpen(false);
   };
+  const handleAdmin = async () => {
+    navigation.navigate("AdminMain");
+  }
   const drawerStyles = {
     backgroundColor: "rgba(0, 0, 0, 0.7)",
     padding: 10,
@@ -144,12 +152,22 @@ const CartScreen = () => {
               padding: 10,
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "flex-start", // Align items to the right
+              justifyContent: "flex-end", // Align items to the right
             }}
           >
             <TouchableOpacity style={styles.menuButton} onPress={toggleDrawer}>
       <Entypo name="menu" size={24} color="white" />
     </TouchableOpacity> 
+    {role === 'admin' && (
+            <Pressable onPress={handleAdmin}>
+            <MaterialIcons
+              name="supervisor-account"
+              size={24}
+              color="white"
+              marginRight= {10}
+            />
+          </Pressable>
+          )}
             </View>
         <ImageBackground
           source={require("../assets/bg.png")}
@@ -334,6 +352,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#FFE4B5",
+  },
+  menuButton: {
+    position: 'absolute',
+    left: 0,
+    top: 0, // Adjust top position as needed
+    zIndex: 999, // Adjust z-index as needed
+    paddingHorizontal: 7, // Adjust padding as needed
+    paddingVertical: 9, // Adjust padding as needed
   },
   overlay: {
     position: 'absolute',

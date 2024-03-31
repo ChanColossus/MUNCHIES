@@ -16,6 +16,7 @@ const PendingOrdersScreen = () => {
       const data = await response.json();
       const pendingOrders = data.data.filter(order => !order.status && order.confirmed);
       setOrders(pendingOrders);
+      console.log(orders)
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
@@ -65,6 +66,7 @@ const PendingOrdersScreen = () => {
     <View style={styles.orderItemContainer}>
       <View style={styles.orderDetails}>
         <Text style={styles.boldText}>Order ID: <Text>{item._id}</Text></Text>
+        <Text style={styles.boldText}>Ordered By: <Text>{item.user.name}</Text></Text>
         <Text style={styles.boldText}>Status: <Text>{item.status ? "Completed" : "Pending"}</Text></Text>
         <Text style={[styles.boldText, styles.productsTitle]}>Products:</Text>
         <FlatList
@@ -77,9 +79,9 @@ const PendingOrdersScreen = () => {
           keyExtractor={(item, index) => index.toString()}
         />
         <Text style={styles.boldText}>Total Price:</Text>
-        <Text>{item.totalPrice}</Text>
+        <Text style={styles.productItem}>₱{item.totalPrice}</Text>
         <Text style={styles.boldText}>Payment Method:</Text>
-        <Text>{item.paymentMethod}</Text>
+        <Text style={styles.productItem}>{item.paymentMethod}</Text>
         <TouchableOpacity style={styles.updateButton} onPress={() => updateOrderStatus(item._id)}>
           <Text style={styles.updateButtonText}>Update Status</Text>
         </TouchableOpacity>
@@ -87,7 +89,7 @@ const PendingOrdersScreen = () => {
           <Text style={styles.removeButtonText}>Remove Order</Text>
         </TouchableOpacity>
       </View>
-      <Image source={require('../../../assets/logo.png')} style={styles.image} />
+      {/* <Image source={require('../../../assets/logo.png')} style={styles.image} /> */}
     </View>
   );
   
@@ -96,7 +98,7 @@ const PendingOrdersScreen = () => {
     <SafeAreaView
       style={{
         alignSelf: "stretch",
-        paddingTop: Platform.OS === "android" ? 40 : 0,
+        paddingTop: Platform.OS === "android" ? 10 : 0,
         flex: 1,
         backgroundColor: "#FFE4B5",
       }}
@@ -157,18 +159,19 @@ const styles = StyleSheet.create({
   },
   boldText: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 12,
   },
   productsTitle: {
     marginTop: 10,
-    fontSize: 18,
+    fontSize: 12,
   },
   productItem: {
     marginLeft: 20,
+    fontSize:12
   },
   updateButton: {
     backgroundColor: 'green',
-    padding: 10,
+    padding: 3,
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 10,
@@ -179,7 +182,7 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     backgroundColor: 'red',
-    padding: 10,
+    padding: 3,
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 10,
@@ -198,8 +201,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 250,
-    height: 250,
+    width: 100,
+    height: 100,
     borderRadius: 25, // To make it circular, adjust radius as needed
   },
   removeButtonText: {

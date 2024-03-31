@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
-import Drawer from "../screens/Drawer";
+
 import HomeScreen from "../screens/HomeScreen";
 import CartScreen from "../screens/CartScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -40,7 +40,7 @@ const AdminNavigator = () => {
   function BottomTabs() {
     return (
       <Tab.Navigator
-        tabBarStyle={{ backgroundColor: "black" }} // Set background color to black
+        tabBarStyle={{ color: "black" }} // Set background color to black
         tabBarActiveTintColor="white" // Set active tab label color to white
         tabBarInactiveTintColor="black" // Set inactive tab label color to black
       >
@@ -49,12 +49,13 @@ const AdminNavigator = () => {
           component={Dashboard}
           options={{
             tabBarLabel: "Dashboard",
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Entypo name="home" size={24} color="#0F0F0F" />
+                <MaterialIcons name="analytics" size={18} color="black" />
               ) : (
-                <AntDesign name="home" size={24} color="black" />
+                <MaterialIcons name="analytics" size={18} color="black" />
               ),
           }}
         />
@@ -63,26 +64,28 @@ const AdminNavigator = () => {
           component={Orders}
           options={{
             tabBarLabel: "Orders",
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Entypo name="home" size={24} color="#0F0F0F" />
+                <MaterialIcons name="shopping-cart" size={18} color="black" />
               ) : (
-                <AntDesign name="home" size={24} color="black" />
+                <MaterialIcons name="shopping-cart" size={18} color="black" />
               ),
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Home"
           component={HomeScreen}
           options={{
             tabBarLabel: "Home",
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Entypo name="home" size={24} color="#0F0F0F" />
+                <Entypo name="home" size={18} color="#0F0F0F" />
               ) : (
-                <AntDesign name="home" size={24} color="black" />
+                <AntDesign name="home" size={18} color="black" />
               ),
           }}
         />
@@ -91,12 +94,13 @@ const AdminNavigator = () => {
           component={Profile}
           options={{
             tabBarLabel: "Profile",
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <FontAwesome name="user-circle" size={24} color="#0F0F0F" />
+                <FontAwesome name="user-circle" size={18} color="#0F0F0F" />
               ) : (
-                <FontAwesome name="user-circle-o" size={24} color="black" />
+                <FontAwesome name="user-circle-o" size={18} color="black" />
               ),
           }}
         />
@@ -105,27 +109,28 @@ const AdminNavigator = () => {
           component={CartScreen}
           options={{
             tabBarLabel: "Cart",
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Ionicons name="cart-sharp" size={24} color="#0F0F0F" />
+                <Ionicons name="cart-sharp" size={18} color="#0F0F0F" />
               ) : (
-                <Ionicons name="cart-outline" size={24} color="black" />
+                <Ionicons name="cart-outline" size={18} color="black" />
               ),
           }}
-        />
+        /> */}
         <Tab.Screen
           name="Munchies"
           component={MunchiesScreen}
           options={{
             tabBarLabel: "Munchies",
-            tabBarLabelStyle: { color: "black" },
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <MaterialIcons name="restaurant" size={24} color="black" />
+                <MaterialIcons name="restaurant" size={18} color="black" />
               ) : (
-                <MaterialIcons name="restaurant" size={24} color="black" />
+                <MaterialIcons name="restaurant" size={18} color="black" />
               ),
           }}
         />
@@ -134,13 +139,13 @@ const AdminNavigator = () => {
           component={BevviesScreen}
           options={{
             tabBarLabel: "Bevvies",
-            tabBarLabelStyle: { color: "black" },
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <MaterialIcons name="local-bar" size={24} color="black" />
+                <MaterialIcons name="local-bar" size={18} color="black" />
               ) : (
-                <MaterialIcons name="local-bar" size={24} color="black" />
+                <MaterialIcons name="local-bar" size={18} color="black" />
               ),
           }}
         />
@@ -149,13 +154,13 @@ const AdminNavigator = () => {
           component={InventoryScreen}
           options={{
             tabBarLabel: "Inventory",
-            tabBarLabelStyle: { color: "black" },
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <MaterialIcons name="local-bar" size={24} color="black" />
+                <MaterialIcons name="inventory" size={18} color="black" />
               ) : (
-                <MaterialIcons name="local-bar" size={24} color="black" />
+                <MaterialIcons name="inventory" size={18} color="black" />
               ),
           }}
         />
@@ -174,12 +179,13 @@ const AdminNavigator = () => {
           component={HomeScreen}
           options={{
             tabBarLabel: "Home",
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Entypo name="home" size={24} color="#0F0F0F" />
+                <Entypo name="home" size={18} color="#0F0F0F" />
               ) : (
-                <AntDesign name="home" size={24} color="black" />
+                <AntDesign name="home" size={18} color="black" />
               ),
           }}
         />
@@ -188,12 +194,13 @@ const AdminNavigator = () => {
           component={Profile}
           options={{
             tabBarLabel: "Profile",
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <FontAwesome name="user-circle" size={24} color="#0F0F0F" />
+                <FontAwesome name="user-circle" size={18} color="#0F0F0F" />
               ) : (
-                <FontAwesome name="user-circle-o" size={24} color="black" />
+                <FontAwesome name="user-circle-o" size={18} color="black" />
               ),
           }}
         />
@@ -202,12 +209,13 @@ const AdminNavigator = () => {
           component={CartScreen}
           options={{
             tabBarLabel: "Cart",
+            tabBarLabelStyle: { color: "black",fontSize:5 },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Ionicons name="cart-sharp" size={24} color="#0F0F0F" />
+                <Ionicons name="cart-sharp" size={18} color="#0F0F0F" />
               ) : (
-                <Ionicons name="cart-outline" size={24} color="black" />
+                <Ionicons name="cart-outline" size={18} color="black" />
               ),
           }}
         />
@@ -223,11 +231,11 @@ const AdminNavigator = () => {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Inventory"
           component={InventoryScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
         <Stack.Screen
           name="Review"
           component={Review}
@@ -258,6 +266,16 @@ const AdminNavigator = () => {
           component={BottomTabs}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Cart"
+          component={CartScreen}
+          options={{ headerShown: false }}
+        />
 
         <Stack.Screen
           name="BevviesCreate"
@@ -269,11 +287,11 @@ const AdminNavigator = () => {
           component={BevviesUpdate}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Bevvies"
           component={BevviesScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
         <Stack.Screen
           name="MunchiesCreate"
           component={MunchiesCreate}
@@ -313,11 +331,11 @@ const AdminNavigator = () => {
           component={BevviesReviews}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="MunchiesScreen"
           component={MunchiesScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
          <Stack.Screen
           name="InventoryScreen"
           component={InventoryScreen}
@@ -342,11 +360,7 @@ const AdminNavigator = () => {
           component={InventoryUpdate}
           options={{ headerShown: false }}
         />
-       <Stack.Screen
-          name="Drawer"
-          component={Drawer}
-          options={{ headerShown: false }}
-        />
+     
       </Stack.Navigator>
       {/* <Drawer/> */}
     </NavigationContainer>

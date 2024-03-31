@@ -13,10 +13,10 @@ const data = [
   { label: "Pasta", value: "Pasta" },
 ];
 
-const DropdownComponent = ({ onValueChange }) => {
+const DropdownComponent = ({ onValueChange,item }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-
+  const [category, setCategory] = useState(item.category);
   const renderLabel = () => {
     if (value || isFocus) {
       return (
@@ -42,7 +42,7 @@ const DropdownComponent = ({ onValueChange }) => {
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? "Select item" : "..."}
+        placeholder={category}
         searchPlaceholder="Munchies"
         value={value}
         onFocus={() => setIsFocus(true)}

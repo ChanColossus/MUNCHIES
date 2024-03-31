@@ -25,6 +25,7 @@ import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 const Profile = () => {
   const navigation = useNavigation();
   const [userProfile, setUserProfile] = useState(null);
@@ -36,7 +37,8 @@ const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
   const [editedReview, setEditedReview] = useState({ rating: '', comment: '' });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [translateX] = useState(new Animated.Value(0)); // State for edited review
+  const [translateX] = useState(new Animated.Value(0)); 
+  const [role, setUserRole] = useState("");// State for edited review
   const ordersPerPage = 5;
   const url = apiUrl;
 
@@ -67,6 +69,9 @@ const Profile = () => {
             const reviewsMunchiesResponse = await axios.get(`${url}/munchiesreview/${response.data.user._id}`, config);
             setUserMunchiesReviews(reviewsMunchiesResponse.data.reviews);
             console.log('REVIEWTO!!!!', userMunchiesReviews);
+            const role = await AsyncStorage.getItem("role");
+ 
+        setUserRole(role);
             // Sort orders by date in descending order
           } else {
             console.log('Authentication token not found');
@@ -178,7 +183,9 @@ const Profile = () => {
     navigation.navigate(screenName);
     closeDrawer();
   };
-
+  const handleAdmin = async () => {
+    navigation.navigate("AdminMain");
+  }
   const handleSaveEditedReview = async () => {
     try {
       // Validate edited review data
@@ -265,12 +272,22 @@ const Profile = () => {
               padding: 10,
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "flex-start", // Align items to the right
+              justifyContent: "flex-end", // Align items to the right
             }}
           >
             <TouchableOpacity style={styles.menuButton} onPress={toggleDrawer}>
       <Entypo name="menu" size={24} color="white" />
     </TouchableOpacity> 
+    {role === 'admin' && (
+            <Pressable onPress={handleAdmin}>
+            <MaterialIcons
+              name="supervisor-account"
+              size={24}
+              color="white"
+              marginRight= {10}
+            />
+          </Pressable>
+          )}
             </View>
         <ImageBackground source={require('../../assets/bg.png')} style={styles.backgroundImage}>
           <View style={styles.logoContainer}>
@@ -706,6 +723,14 @@ const styles = StyleSheet.create({
     borderRadius: 50, // Make it circular
     borderWidth: 2, // Border width
     borderColor: '#000', // Border color
+  },
+  menuButton: {
+    position: 'absolute',
+    left: 0,
+    top: 0, // Adjust top position as needed
+    zIndex: 999, // Adjust z-index as needed
+    paddingHorizontal: 7, // Adjust padding as needed
+    paddingVertical: 9, // Adjust padding as needed
   },
   title: {
     fontSize: 20,

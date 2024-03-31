@@ -47,7 +47,7 @@ const BevviesScreen = () => {
     <SafeAreaView
       style={{
         alignSelf: "stretch",
-        paddingTop: Platform.OS === "android" ? 40 : 0,
+        paddingTop: Platform.OS === "android" ? 10 : 0,
         flex: 1,
         backgroundColor: "#FFE4B5",
       }}
@@ -112,13 +112,10 @@ const BevviesScreen = () => {
           </Box>
           <DataTable style={{}}>
             <DataTable.Header borderColor={"black"}>
-              <DataTable.Title>Images</DataTable.Title>
-              <DataTable.Title>Name</DataTable.Title>
-              <DataTable.Title>Price</DataTable.Title>
-              <DataTable.Title>Description</DataTable.Title>
-        
-              <DataTable.Title>Category</DataTable.Title>
-              <DataTable.Title>Action</DataTable.Title>
+              <DataTable.Title>     Images</DataTable.Title>
+              <DataTable.Title>    Name</DataTable.Title>
+              <DataTable.Title>  Category</DataTable.Title>
+              <DataTable.Title>        Action</DataTable.Title>
             </DataTable.Header>
             <View style={{ maxHeight: "100%" }}>
               <ScrollView>
