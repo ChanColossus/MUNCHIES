@@ -26,15 +26,6 @@ export default function StoreLocation() {
       });
     };
   return (
-    <SafeAreaView
-    style={{
-      alignSelf: "stretch",
-      paddingTop: Platform.OS === "android" ? 40 : 0,
-      flex: 1,
-      backgroundColor: "#FFE4B5",
-    }}
-  >
-    <ScrollView contentContainerStyle={{ paddingHorizontal: 0 }}>
           <View style={styles.container}>
               <MapView
                 style={styles.map}
@@ -50,8 +41,6 @@ export default function StoreLocation() {
               </MapView>
               <StatusBar style="auto" />
             </View>
-            </ScrollView>
-            </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
