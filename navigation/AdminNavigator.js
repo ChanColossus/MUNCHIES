@@ -30,7 +30,7 @@ import Profile from "../screens/User/Profile";
 import Review from "../screens/CreateReview";
 import MunchiesReviews from "../screens/Admin/Munchies/Review"
 import BevviesReviews from "../screens/Admin/Bevvies/Review"
-
+import Location from "../screens/StoreLocation";
 
 const AdminNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -231,6 +231,11 @@ const AdminNavigator = () => {
         <Stack.Screen
           name="Review"
           component={Review}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Location"
+          component={Location}
           options={{ headerShown: false }}
         />
 <Stack.Screen

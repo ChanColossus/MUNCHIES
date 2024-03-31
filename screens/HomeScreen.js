@@ -140,7 +140,9 @@ const HomeScreen = () => {
     closeDrawer();
   };
 
-
+  const handleLocation = async () => {
+    navigation.navigate("Location");
+  }
   return (
     <SafeAreaView
       style={{
@@ -166,7 +168,15 @@ const HomeScreen = () => {
               <TouchableOpacity style={styles.menuButton} onPress={toggleDrawer}>
       <Entypo name="menu" size={24} color="white" />
     </TouchableOpacity> 
-            <Text
+    <Pressable onPress={handleLocation}>
+              <MaterialIcons
+                name="pin-drop"
+                size={24}
+                color="white"
+                marginRight= {10}
+              />
+            </Pressable>
+            {/* <Text
               style={{
                 fontSize: 16,
                 color: "#FFF6E0",
@@ -175,7 +185,7 @@ const HomeScreen = () => {
               }}
             >
               Logout
-            </Text>
+            </Text> */}
             <Pressable onPress={handleLogout}>
               <AntDesign name="logout" size={24} color="white" />
             </Pressable>
