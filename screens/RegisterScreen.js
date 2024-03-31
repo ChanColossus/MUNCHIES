@@ -6,6 +6,7 @@ import {
   Image,
   KeyboardAvoidingView,
   TextInput,
+  ScrollView,
   Pressable,
   Alert,
 } from "react-native";
@@ -16,6 +17,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import {apiUrl} from "../ip"
+
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -56,7 +58,8 @@ const RegisterScreen = () => {
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFE4B5", alignItems: "center" }}
     >
-      <View style={{ alignItems: "center", marginTop: 100 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={{ alignItems: "center", marginTop: 70 }}>
         <View
           style={{
             width: 220,
@@ -74,13 +77,13 @@ const RegisterScreen = () => {
         </View>
       </View>
 
-      <KeyboardAvoidingView>
+     
         <View style={{ alignItems: "center" }}>
           <Text
             style={{
               fontSize: 17,
               fontWeight: "bold",
-              marginTop: 60,
+              marginTop: 30,
               color: "#041E42",
             }}
           >
@@ -88,17 +91,17 @@ const RegisterScreen = () => {
           </Text>
         </View>
 
-        <View style={{ marginTop: 10 }}>
+
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               gap: 5,
               backgroundColor: "white",
-              paddingVertical: 5,
+              paddingVertical: 0,
               borderRadius: 5,
               marginTop: 30,
-              borderWidth: 1,
+              borderWidth: 2,
               borderColor: "black",
               paddingHorizontal: 8,
             }}
@@ -121,19 +124,19 @@ const RegisterScreen = () => {
               placeholder="Enter your Name"
             />
           </View>
-        </View>
+       
 
-        <View>
+        
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               gap: 5,
               backgroundColor: "white",
-              paddingVertical: 5,
+              paddingVertical: 0,
               borderRadius: 5,
               marginTop: 30,
-              borderWidth: 1,
+              borderWidth: 2,
               borderColor: "black",
               paddingHorizontal: 8,
             }}
@@ -156,19 +159,19 @@ const RegisterScreen = () => {
               placeholder="Enter your Email"
             />
           </View>
-        </View>
+    
 
-        <View>
+       
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               gap: 5,
               backgroundColor: "white",
-              paddingVertical: 5,
+              paddingVertical: 0,
               borderRadius: 5,
               marginTop: 30,
-              borderWidth: 1,
+              borderWidth: 2,
               borderColor: "black",
               paddingHorizontal: 8,
             }}
@@ -192,9 +195,9 @@ const RegisterScreen = () => {
               placeholder="Enter your Password"
             />
           </View>
-        </View>
+        
 
-        <View style={{ marginTop: 50 }} />
+        <View style={{ marginTop: 30 }} />
 
         <Pressable
           onPress={handleRegister}
@@ -204,7 +207,7 @@ const RegisterScreen = () => {
             borderRadius: 6,
             marginLeft: "auto",
             marginRight: "auto",
-            padding: 15,
+            padding: 8,
           }}
         >
           <Text
@@ -222,6 +225,7 @@ const RegisterScreen = () => {
         <Pressable onPress={() => navigation.goBack()} style={{ marginTop: 5 }}>
           <Text
             style={{
+              marginTop: 15,
               textAlign: "center",
               color: "gray",
               fontSize: 16,
@@ -230,7 +234,8 @@ const RegisterScreen = () => {
             Already have an account? Sign In
           </Text>
         </Pressable>
-      </KeyboardAvoidingView>
+     
+      </ScrollView>
     </SafeAreaView>
   );
 };

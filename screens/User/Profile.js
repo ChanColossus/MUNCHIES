@@ -253,7 +253,7 @@ const Profile = () => {
     <SafeAreaView
       style={{
         alignSelf: 'stretch',
-        paddingTop: Platform.OS === 'android' ? 40 : 0,
+        paddingTop: Platform.OS === 'android' ? 10 : 0,
         flex: 1,
         backgroundColor: '#FFE4B5',
       }}
@@ -334,43 +334,40 @@ const Profile = () => {
           </View>
           {/* Display reviews based on the selected category */}
           {userReviews.map((review, index) => (
-            selectedCategory === 'Bevvies' && (
-              <View key={index} style={styles.reviewItem}>
-                <View style={styles.reviewHeader}>
-                  <Text style={styles.reviewProductName}>{review.Bevvies && review.Bevvies.name}</Text>
-                  <Text style={styles.reviewDate}>{review.rating}</Text>
-                  <Text style={styles.reviewComment}>{review.comment}</Text>
-                </View>
-                <View style={[styles.reviewActions, { marginTop: 10 }]}>
-                  <Pressable style={styles.actionButton} onPress={() => handleEditReview(review)}>
-                    <Text style={styles.actionButtonText}>Edit</Text>
-                  </Pressable>
-                  <Pressable style={styles.actionButton} onPress={() => handleBevviesDeleteReview(review._id)}>
-                    <Text style={styles.actionButtonText}>Delete</Text>
-                  </Pressable>
-                </View>
-              </View>
-            )
-          ))}
-          {userMunchiesReviews.map((Mreview, index) => (
-            selectedCategory === 'Munchies' && (
-              <View key={index} style={styles.reviewItem}>
-                <View style={styles.reviewHeader}>
-                  <Text style={styles.reviewProductName}>{Mreview.Munchies && Mreview.Munchies.name}</Text>
-                  <Text style={styles.reviewDate}>{Mreview.rating}</Text>
-                  <Text style={styles.reviewComment}>{Mreview.comment}</Text>
-                </View>
-                <View style={[styles.reviewActions, { marginTop: 10 }]}>
-                  <Pressable style={styles.actionButton} onPress={() => handleEditReview(Mreview)}>
-                    <Text style={styles.actionButtonText}>Edit</Text>
-                  </Pressable>
-                  <Pressable style={styles.actionButton} onPress={() => handleMunchiesDeleteReview(Mreview._id)}>
-                    <Text style={styles.actionButtonText}>Delete</Text>
-                  </Pressable>
-                </View>
-              </View>
-            )
-          ))}
+  selectedCategory === 'Bevvies' && (
+    <View key={index} style={styles.reviewItem}>
+      <View style={styles.reviewHeader}>
+        <Text style={styles.reviewProductName}>{review.Bevvies && review.Bevvies.name}</Text>
+        <Text style={styles.reviewDate}>{review.rating}</Text>
+        <Text style={styles.reviewComment}>{review.comment}</Text>
+        <Pressable style={styles.actionButton} onPress={() => handleEditReview(review)}>
+          <Text style={styles.actionButtonText}>Edit</Text>
+        </Pressable>
+        <Pressable style={styles.actionButton} onPress={() => handleBevviesDeleteReview(review._id)}>
+          <Text style={styles.actionButtonText}>Delete</Text>
+        </Pressable>
+      </View>
+    </View>
+  )
+))}
+ {userMunchiesReviews.map((Mreview, index) => (
+  selectedCategory === 'Munchies' && (
+    <View key={index} style={styles.reviewItem}>
+      <View style={styles.reviewHeader}>
+        <Text style={styles.reviewProductName}>{Mreview.Munchies && Mreview.Munchies.name}</Text>
+        <Text style={styles.reviewDate}>{Mreview.rating}</Text>
+        <Text style={styles.reviewComment}>{Mreview.comment}</Text>
+        <Pressable style={styles.actionButton} onPress={() => handleEditReview(Mreview)}>
+          <Text style={styles.actionButtonText}>Edit</Text>
+        </Pressable>
+        <Pressable style={styles.actionButton} onPress={() => handleMunchiesDeleteReview(Mreview._id)}>
+          <Text style={styles.actionButtonText}>Delete</Text>
+        </Pressable>
+      </View>
+    </View>
+  )
+))}
+         
         </View>
       </ScrollView>
       {/* Modal for editing review */}
@@ -424,15 +421,15 @@ const Profile = () => {
   <Pressable
     style={{
       position: "absolute",
-      top: 50,
+      top: 20,
       left: 0,
       flexDirection: "row",
       alignItems: "center",
     }}
     onPress={toggleDrawer}
   >
-    <Text style={{ color: "white", fontSize: 16 }}>Close Drawer</Text>
-    <AntDesign name="close" size={24} color="white" style={{ marginLeft: 80 }} />
+
+    <AntDesign name="close" size={24} color="white" style={{ marginLeft: 175 }} />
   </Pressable>
   
   </View>
@@ -442,7 +439,7 @@ const Profile = () => {
   <ImageBackground
             source={require("../../assets/bg.png")}
             style={{ flex: 1, position: 'absolute',
-            top: 85,
+            top: 54,
             left: 0,
             right: 0,
           height: 119 }}
@@ -498,7 +495,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 40, // Adjust the height to control how much of the drawer is cut
+    height: 10, // Adjust the height to control how much of the drawer is cut
     backgroundColor: '#FFE4B5', // Semi-transparent black color
   },
   drawerItemContainer: {
@@ -585,10 +582,10 @@ const styles = StyleSheet.create({
    
     borderWidth: 2,
     borderRadius: 10,
-    width:"60%",
+    width:"80%",
     alignSelf:"center",
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 30,
   },
   reviewActions: {
     flexDirection: 'row',
@@ -598,16 +595,21 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     backgroundColor: 'black', // Background color for the action buttons
-    paddingHorizontal: 10, // Add some horizontal padding to the buttons
-    paddingVertical: 5, // Add some vertical padding to the buttons
-    borderRadius: 5, // Add border radius to the buttons
+    paddingHorizontal: 120, // Add some horizontal padding to the buttons
+    paddingVertical: 3,
+    marginLeft:15,
+    marginTop:10,
+    marginBottom:10, // Add some vertical padding to the buttons
+    borderRadius: 5,
+    width:300
+     // Add border radius to the buttons
   },
   actionButtonText: {
     color: 'white', // Text color for the action button text
   },
   picker: {
-    height: 50,
-    width: '90%',
+    height: 60,
+    width: '100%',
   },
   reviewItem: {
     marginBottom: 10,
@@ -657,9 +659,9 @@ const styles = StyleSheet.create({
   },
   orderHistoryText: {
     textAlign: 'center',
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 15,
   },
 
   paginationContainer: {
@@ -706,7 +708,7 @@ const styles = StyleSheet.create({
     borderColor: '#000', // Border color
   },
   title: {
-    fontSize: 30,
+    fontSize: 20,
     marginBottom: 20,
     textAlign: "center"
   },
@@ -715,7 +717,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   infoText: {
-    fontSize: 18,
+    fontSize: 10,
     marginVertical: 5,
   },
   buttonContainer: {

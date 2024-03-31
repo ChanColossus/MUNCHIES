@@ -132,7 +132,7 @@ const CartScreen = () => {
     <SafeAreaView
       style={{
         alignSelf: "stretch",
-        paddingTop: Platform.OS === "android" ? 40 : 0,
+        paddingTop: Platform.OS === "android" ? 10 : 0,
         flex: 1,
         backgroundColor: "#FFE4B5",
       }}
@@ -270,15 +270,15 @@ const CartScreen = () => {
   <Pressable
     style={{
       position: "absolute",
-      top: 50,
+      top: 20,
       left: 0,
       flexDirection: "row",
       alignItems: "center",
     }}
     onPress={toggleDrawer}
   >
-    <Text style={{ color: "white", fontSize: 16 }}>Close Drawer</Text>
-    <AntDesign name="close" size={24} color="white" style={{ marginLeft: 80 }} />
+ 
+    <AntDesign name="close" size={24} color="white" style={{ marginLeft: 175 }} />
   </Pressable>
   
   </View>
@@ -288,7 +288,7 @@ const CartScreen = () => {
   <ImageBackground
             source={require("../assets/bg.png")}
             style={{ flex: 1, position: 'absolute',
-            top: 85,
+            top: 54,
             left: 0,
             right: 0,
           height: 119 }}
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 40, // Adjust the height to control how much of the drawer is cut
+    height: 10, // Adjust the height to control how much of the drawer is cut
     backgroundColor: '#FFE4B5', // Semi-transparent black color
   },
   drawerItemContainer: {
@@ -364,8 +364,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   paymentContainer: {
-    flexDirection: "row",
-    alignItems: "center",
     marginTop: 10,
   },
   checkoutButton: {
@@ -385,7 +383,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   radioButtonContainer: {
-    flexDirection: "row",
+    marginTop: 10, // Adjust the spacing between label and options
+    flexDirection: "column", // Align options vertically
   },
   radioButtonText: {
     color: "black", // Default text color
@@ -394,7 +393,7 @@ const styles = StyleSheet.create({
     color: "white", // Text color when selected
   },
   radioButton: {
-    marginRight: 10,
+    marginBottom: 10, // Adjust spacing between options
     borderWidth: 1,
     borderColor: "#000",
     padding: 5,
@@ -415,37 +414,46 @@ const styles = StyleSheet.create({
   },
   columnHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between", // Align column headers with items
     paddingHorizontal: 10,
     marginBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc", // Add a border to separate headers from items
   },
   columnHeaderText: {
     fontWeight: "bold",
-    flex: 1,
+    fontSize: 12,
+    flex: 1, // Make headers take up equal space
+    textAlign: "center", // Center-align header text
   },
   item: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 10,
+    alignItems: "center", // Align items vertically
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "#ccc", // Add a border to separate items
   },
   itemName: {
-    flex: 2,
+    flex: 1, // Adjust based on your content
     fontWeight: "bold",
+    textAlign: "center", // Center-align item text
   },
   itemQuantity: {
-    flex: 1,
+    flex: 1, // Adjust based on your content
+    textAlign: "center", // Center-align item text
   },
   itemPrice: {
-    flex: 1,
+    flex: 1, // Adjust based on your content
     fontWeight: "bold",
+    textAlign: "center", // Center-align item text
   },
   subtotal: {
-    flex: 1,
+    flex: 1, // Adjust based on your content
     fontWeight: "bold",
+    textAlign: "center", // Center-align item text
   },
+
   total: {
     fontSize: 18,
     textAlign: "right",
@@ -453,10 +461,10 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     position: "absolute",
-    top: 20,
-    right: 20,
+    top: 27,
+    right: 5,
     backgroundColor: "red",
-    padding: 10,
+    padding: 3,
     borderRadius: 5,
   },
   clearButtonText: {

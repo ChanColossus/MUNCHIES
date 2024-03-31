@@ -211,32 +211,32 @@ const UserBevvies = () => {
           </View>
         </ImageBackground>
         <View
-          style={{
-            flexDirection: "row",
-            marginLeft: 5,
-            marginRight: 5,
-            marginTop: 10,
-            marginBottom: 10,
-            borderRadius: 5,
-            borderWidth: 2,
-            borderColor: "black",
-            justifyContent: "center",
-          }}
-        >
-          {/* Render category buttons */}
-          {categories.map((category, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.categoryButton,
-                selectedCategory === category && styles.selectedCategoryButton,
-              ]}
-              onPress={() => handleCategorySelect(category)}
-            >
-              <Text style={{ color: "white" }}>{category}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        style={{
+          flexDirection: "row",
+          marginLeft: 5,
+          marginRight: 5,
+          marginTop: 10,
+          marginBottom: 10,
+          borderRadius: 5,
+          borderWidth: 2,
+          borderColor: "black",
+          justifyContent: "center",
+        }}
+      >
+        {/* Render category buttons */}
+        {categories.map((category, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.categoryButton,
+              selectedCategory === category && styles.selectedCategoryButton,
+            ]}
+            onPress={() => handleCategorySelect(category)}
+          >
+            <Text style={{ color: selectedCategory === category ? "black" : "white", fontSize: 6 }}>{category}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
         <View style={styles.row}>
           {/* Render munchies items */}
@@ -332,6 +332,9 @@ const UserBevvies = () => {
                       <Text style={{ color: "white" }}>Add to Cart</Text>
                     </Button>
                   </Box>
+                  <Text style={styles.description}>
+                    Click image to see reviews
+                  </Text>
                 </Box>
               </ImageBackground>
             </View>
@@ -378,8 +381,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   image: {
-    width: 205, // Adjust image width as needed
-    height: 150, // Adjust image height as needed
+    width: 105, // Adjust image width as needed
+    height: 105, // Adjust image height as needed
     resizeMode: "cover",
     alignSelf: "center",
     borderRadius: 5,
@@ -389,25 +392,26 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: "bold",
-    fontSize: 22, // Adjust font size as needed
+    fontSize: 16, // Adjust font size as needed
     textAlign: "center",
   },
   price: {
     fontWeight: "bold",
-    fontSize: 18, // Adjust font size as needed
+    fontSize: 12, // Adjust font size as needed
     textAlign: "center",
     paddingTop: 10,
   },
   description: {
     textAlign: "center",
+    fontSize: 8,
   },
   footer: {
     flexDirection: "row",
     justifyContent: "center",
   },
   categoryButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 5,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
     margin: 5,
     backgroundColor: "black",
     borderRadius: 5,

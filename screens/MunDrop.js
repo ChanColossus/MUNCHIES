@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   dropdown: {
-    height: 40,
+    height: 60,
     color: 'black',
     width: '100%',
   },

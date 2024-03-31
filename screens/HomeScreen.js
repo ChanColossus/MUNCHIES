@@ -147,12 +147,12 @@ const HomeScreen = () => {
     <SafeAreaView
       style={{
         alignSelf: "stretch",
-        paddingTop: Platform.OS === "android" ? 40 : 0,
+        paddingTop: Platform.OS === "android" ? 10 : 0,
         flex: 1,
         backgroundColor: "#FFE4B5",
       }}
     >
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 0 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <ScrollView>
          
         
@@ -176,23 +176,13 @@ const HomeScreen = () => {
                 marginRight= {10}
               />
             </Pressable>
-            {/* <Text
-              style={{
-                fontSize: 16,
-                color: "#FFF6E0",
-                marginTop: 0,
-                marginRight: 5,
-              }}
-            >
-              Logout
-            </Text> */}
             <Pressable onPress={handleLogout}>
               <AntDesign name="logout" size={24} color="white" />
             </Pressable>
           </View>
           <ImageBackground
             source={require("../assets/bg.png")}
-            style={{ flex: 1 }}
+            style={{ flex: 1, height:124 }}
           >
            
             <View
@@ -204,7 +194,7 @@ const HomeScreen = () => {
               }}
             >
               <Image
-                style={{ width: 100, height: 100, marginRight: 20 }} // Adjust size as needed
+                style={{ width: 100, height: 100, marginRight: 0 }} // Adjust size as needed
                 source={require("../assets/logo.png")}
               />
               <View
@@ -212,12 +202,13 @@ const HomeScreen = () => {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  padding: 10,
+                  padding: 0, marginRight: 10
+                  
                 }}
               >
                 <Text
                   style={{
-                    fontSize: 35,
+                    fontSize: 20,
                     fontWeight: "bold",
                     fontFamily: "Roboto-Bold",
                     color: "#FFF6E0",
@@ -228,7 +219,7 @@ const HomeScreen = () => {
                 </Text>
                 <View style={{ alignItems: "center" }}>
                   <Text
-                    style={{ fontSize: 16, color: "#FFF6E0", marginTop: 5 }}
+                    style={{ fontSize: 10, color: "#FFF6E0", marginTop: 5 }}
                   >
                     North Poblacion, Bucay, Abra, Philippines
                   </Text>
@@ -303,15 +294,15 @@ const HomeScreen = () => {
   <Pressable
     style={{
       position: "absolute",
-      top: 50,
+      top: 20,
       left: 0,
       flexDirection: "row",
       alignItems: "center",
     }}
     onPress={toggleDrawer}
   >
-    <Text style={{ color: "white", fontSize: 16 }}>Close Drawer</Text>
-    <AntDesign name="close" size={24} color="white" style={{ marginLeft: 80 }} />
+   
+    <AntDesign name="close" size={24} color="white" style={{ marginLeft: 175 }} />
   </Pressable>
   
   </View>
@@ -321,7 +312,7 @@ const HomeScreen = () => {
   <ImageBackground
             source={require("../assets/bg.png")}
             style={{ flex: 1, position: 'absolute',
-            top: 85,
+            top: 54,
             left: 0,
             right: 0,
           height: 123 }}
@@ -372,14 +363,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    marginTop: 50, // Increased margin top for better spacing
+    marginTop: 40, // Increased margin top for better spacing
   },
   overlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 40, // Adjust the height to control how much of the drawer is cut
+    height: 10, // Adjust the height to control how much of the drawer is cut
     backgroundColor: '#FFE4B5', // Semi-transparent black color
   },
   drawerItemContainer: {
@@ -400,8 +391,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    paddingVertical: 30, // Increased padding vertically for bigger buttons
-    paddingHorizontal: 40,
+    paddingVertical: 10, // Increased padding vertically for bigger buttons
+    paddingHorizontal: 10,
 
     borderWidth: 3,
     borderColor: "black",
@@ -420,7 +411,7 @@ const styles = StyleSheet.create({
   containertext: {
     backgroundColor: "#D2B48C",
     borderRadius: 10,
-    padding: 10,
+    padding: 5,
     alignItems: "center",
     marginTop: 40,
     marginLeft: 50,
@@ -438,7 +429,7 @@ const styles = StyleSheet.create({
     paddingVertical: 9, // Adjust padding as needed
   },
   text: {
-    fontSize: 24,
+    fontSize: 10,
     fontWeight: "bold",
     fontFamily: "Roboto-Bold",
     color: "#3B2F2F", // Text color inside the container
@@ -451,7 +442,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   header: {
-    fontSize: 30,
+    fontSize: 20,
     textAlign: "center",
     fontWeight: "bold",
     fontFamily: "Roboto-Bold",
@@ -463,13 +454,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "lightgrey",
     paddingVertical: 10,
+    fontSize:10
   },
   cell: {
     flex: 1,
     textAlign: "center",
-    fontSize: 20, // Increase font size for better visibility
+    fontSize: 10, // Increase font size for better visibility
     fontWeight: "bold",
-    paddingVertical: 15, // Adjust vertical padding to increase cell height
-    paddingHorizontal: 20,
+    paddingVertical: 5, // Adjust vertical padding to increase cell height
+    paddingHorizontal: 5,
   },
 });

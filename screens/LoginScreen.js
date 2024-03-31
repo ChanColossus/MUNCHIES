@@ -4,10 +4,10 @@ import {
   View,
   SafeAreaView,
   Image,
-  KeyboardAvoidingView,
   TextInput,
   Pressable,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -15,16 +15,16 @@ import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import {apiUrl} from "../ip"
+import { apiUrl } from "../ip";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-const url = apiUrl
+  const url = apiUrl;
 
   useEffect(() => {
-    console.log("url:",url)
+    console.log("url:", url);
     const checkLoginStatus = async () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
@@ -78,34 +78,37 @@ const url = apiUrl
   };
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFE4B5", alignItems: "center" }}
-    >
-      <View style={{ alignItems: "center", marginTop: 100 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFE4B5" }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View
           style={{
-            width: 220,
-            height: 220,
-            borderRadius: 110,
-            borderWidth: 2,
-            borderColor: "black",
-            overflow: "hidden",
+            alignItems: "center",
+            marginTop: 100,
           }}
         >
-          <Image
-            style={{ width: "100%", height: "100%" }}
-            source={require("../assets/logo.png")}
-          />
+          <View
+            style={{
+              width: 220,
+              height: 220,
+              borderRadius: 110,
+              borderWidth: 2,
+              borderColor: "black",
+              overflow: "hidden",
+            }}
+          >
+            <Image
+              style={{ width: "100%", height: "100%" }}
+              source={require("../assets/logo.png")}
+            />
+          </View>
         </View>
-      </View>
 
-      <KeyboardAvoidingView>
         <View style={{ alignItems: "center" }}>
           <Text
             style={{
               fontSize: 17,
               fontWeight: "bold",
-              marginTop: 60,
+              marginTop: 40,
               color: "#041E42",
             }}
           >
@@ -113,7 +116,7 @@ const url = apiUrl
           </Text>
         </View>
 
-        <View style={{ marginTop: 10 }}>
+        
           <View
             style={{
               flexDirection: "row",
@@ -126,6 +129,8 @@ const url = apiUrl
               borderWidth: 1,
               borderColor: "black",
               paddingHorizontal: 8,
+              width: 300,
+              alignSelf:"center"
             }}
           >
             <MaterialIcons
@@ -140,15 +145,15 @@ const url = apiUrl
               style={{
                 color: "gray",
                 marginVertical: 10,
-                width: 300,
+                width: 250,
                 fontSize: email ? 16 : 16,
               }}
               placeholder="Enter your Email"
             />
           </View>
-        </View>
+      
 
-        <View>
+        
           <View
             style={{
               flexDirection: "row",
@@ -161,6 +166,8 @@ const url = apiUrl
               borderWidth: 1,
               borderColor: "black",
               paddingHorizontal: 8,
+              width: 300,
+              alignSelf:"center"
             }}
           >
             <Entypo
@@ -176,30 +183,25 @@ const url = apiUrl
               style={{
                 color: "gray",
                 marginVertical: 10,
-                width: 300,
+                width: 250,
                 fontSize: 16,
               }}
               placeholder="Enter your Password"
             />
           </View>
-        </View>
-
-        {/* <View style={{ marginTop: 12, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                    <Text>Keep me logged in</Text>
-                    <Text style={{ color: "#007FFF", fontWeight: "500" }}>Forgot Password</Text>
-                </View> */}
+      
 
         <View style={{ marginTop: 50 }} />
 
         <Pressable
           onPress={handleLogin}
           style={{
-            width: 200,
+            width: 150,
             backgroundColor: "#0F0F0F",
             borderRadius: 6,
             marginLeft: "auto",
             marginRight: "auto",
-            padding: 15,
+            padding: 7,
           }}
         >
           <Text
@@ -228,7 +230,7 @@ const url = apiUrl
             Don't have an account? Sign Up
           </Text>
         </Pressable>
-      </KeyboardAvoidingView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
