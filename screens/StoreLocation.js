@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View,ScrollView,SafeAreaView,Platform } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 let locationOfInterest = [
@@ -26,6 +26,15 @@ export default function StoreLocation() {
       });
     };
   return (
+    <SafeAreaView
+    style={{
+      alignSelf: "stretch",
+      paddingTop: Platform.OS === "android" ? 40 : 0,
+      flex: 1,
+      backgroundColor: "#FFE4B5",
+    }}
+  >
+    <ScrollView contentContainerStyle={{ paddingHorizontal: 0 }}>
           <View style={styles.container}>
               <MapView
                 style={styles.map}
@@ -41,6 +50,8 @@ export default function StoreLocation() {
               </MapView>
               <StatusBar style="auto" />
             </View>
+            </ScrollView>
+            </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
