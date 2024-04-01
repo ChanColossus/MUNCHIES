@@ -230,6 +230,20 @@ const LoginScreen = () => {
             Don't have an account? Sign Up
           </Text>
         </Pressable>
+        <Pressable
+          onPress={() => navigation.navigate("ForgotPass")}
+          style={{ marginTop: 5 }}
+        >
+          <Text
+            style={{
+              textAlign: "center",
+              color: "gray",
+              fontSize: 16,
+            }}
+          >
+           Forgot Password
+          </Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );

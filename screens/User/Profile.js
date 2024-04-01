@@ -42,53 +42,52 @@ const Profile = () => {
   const ordersPerPage = 5;
   const url = apiUrl;
 
-  useFocusEffect(
-    useCallback(() => {
-      const getProfile = async () => {
+    useEffect(() => {
+      const fetchProfile = async () => {
         try {
           const token = await AsyncStorage.getItem('authToken');
-          console.log(token);
           if (token) {
             const config = {
               headers: {
                 Authorization: `${token}`,
               },
             };
-
-            const response = await axios.get(`${url}/profile`, config);
-            console.log(response.data.user);
-            setUserProfile(response.data.user);
-            // Fetch orders
-            const ordersResponse = await axios.get(`${url}/orders/${response.data.user._id}`, config);
-            console.log(ordersResponse.data.orders);
+  
+            const profileResponse = await axios.get(`${url}/profile`, config);
+            const userProfile = profileResponse.data.user;
+            setUserProfile(userProfile);
+  
+            const ordersResponse = await axios.get(`${url}/orders/${userProfile._id}`, config);
             const sortedOrders = ordersResponse.data.orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setUserOrders(sortedOrders);
-            const reviewsResponse = await axios.get(`${url}/review/${response.data.user._id}`, config);
+  
+            const reviewsResponse = await axios.get(`${url}/review/${userProfile._id}`, config);
             setUserReviews(reviewsResponse.data.reviews);
-            console.log('REVIEWTO!!!!', userReviews);
-            const reviewsMunchiesResponse = await axios.get(`${url}/munchiesreview/${response.data.user._id}`, config);
-            setUserMunchiesReviews(reviewsMunchiesResponse.data.reviews);
-            console.log('REVIEWTO!!!!', userMunchiesReviews);
+  
+            const munchiesReviewsResponse = await axios.get(`${url}/munchiesreview/${userProfile._id}`, config);
+            setUserMunchiesReviews(munchiesReviewsResponse.data.reviews);
+  
             const role = await AsyncStorage.getItem("role");
- 
-        setUserRole(role);
-            // Sort orders by date in descending order
+            setUserRole(role);
           } else {
             console.log('Authentication token not found');
           }
         } catch (error) {
-          console.log('Error fetching profile:', error);
+          console.error('Error fetching profile:', error);
         }
       };
-
-      getProfile();
+  
+      const fetchProfileInterval = setInterval(() => {
+        fetchProfile();
+      }, 3000);
+  
+      // Fetch initial profile data
+      fetchProfile();
+  
+      // Clean up interval
+      return () => clearInterval(fetchProfileInterval);
     }, [])
-  );
 
-  const handleCategoryChange = (itemValue) => {
-    setSelectedCategory(itemValue);
-    // Here you can filter userReviews based on the selected category if needed
-  };
 
   const formattedDate = (date) => {
     const d = new Date(date);
@@ -260,7 +259,7 @@ const Profile = () => {
     <SafeAreaView
       style={{
         alignSelf: 'stretch',
-        paddingTop: Platform.OS === 'android' ? 10 : 0,
+        paddingTop: 30,
         flex: 1,
         backgroundColor: '#FFE4B5',
       }}
@@ -269,7 +268,7 @@ const Profile = () => {
       <View
             style={{
               backgroundColor: "rgba(0, 0, 0, 0.7)",
-              padding: 10,
+              paddingBottom:40,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "flex-end", // Align items to the right
@@ -438,7 +437,7 @@ const Profile = () => {
   <Pressable
     style={{
       position: "absolute",
-      top: 20,
+      top: 40,
       left: 0,
       flexDirection: "row",
       alignItems: "center",
@@ -456,7 +455,7 @@ const Profile = () => {
   <ImageBackground
             source={require("../../assets/bg.png")}
             style={{ flex: 1, position: 'absolute',
-            top: 54,
+            top: 70,
             left: 0,
             right: 0,
           height: 119 }}
@@ -512,12 +511,12 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 10, // Adjust the height to control how much of the drawer is cut
+    height: 30, // Adjust the height to control how much of the drawer is cut
     backgroundColor: '#FFE4B5', // Semi-transparent black color
   },
   drawerItemContainer: {
     position: 'absolute',
-    top: 220,
+    top: 250,
     left: 0,
     right: 0,
     paddingBottom: 10,

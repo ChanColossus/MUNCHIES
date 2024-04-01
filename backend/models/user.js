@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
         default: 'user'
     },
     verificationToken: String,
+    resetPasswordToken: String,
     orders: [
         {
             type: mongoose.Schema.Types.ObjectId,

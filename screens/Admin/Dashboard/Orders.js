@@ -7,20 +7,27 @@ const PendingOrdersScreen = () => {
   const url = apiUrl;
 
   useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch(`${url}/orders`);
+        const data = await response.json();
+        const pendingOrders = data.data.filter(order => !order.status && order.confirmed);
+        setOrders(pendingOrders);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    };
+  
+    const fetchOrdersInterval = setInterval(() => {
+      fetchOrders();
+    }, 3000);
+  
+    // Fetch initial orders
     fetchOrders();
+  
+    // Clean up interval
+    return () => clearInterval(fetchOrdersInterval);
   }, []);
-
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch(`${url}/orders`);
-      const data = await response.json();
-      const pendingOrders = data.data.filter(order => !order.status && order.confirmed);
-      setOrders(pendingOrders);
-      console.log(orders)
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-    }
-  };
 
   const updateOrderStatus = async (orderId) => {
     

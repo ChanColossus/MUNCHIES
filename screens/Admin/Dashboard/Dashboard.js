@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, Pressable,StyleSheet,
-  Animated,SafeAreaView,ScrollView,Platform,ImageBackground,Image,TouchableOpacity} from "react-native";
+  Animated,SafeAreaView,ScrollView,Platform,ImageBackground,Image,TouchableOpacity,FlatList} from "react-native";
 import { BarChart } from "react-native-chart-kit";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -10,14 +10,12 @@ import { useFonts } from 'expo-font';
 import { apiUrl } from "../../../ip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-const data = {
-  labels: ["January", "February", "March", "April", "May", "June"],
-  datasets: [
-    {
-      data: [20, 45, 28, 80, 99, 43],
-    },
-  ],
-};
+import { LineChart, PieChart } from 'react-native-chart-kit';
+
+import {
+  StackedBarChart,
+  ChartType,
+} from "@tanmaya_pradhan/react-native-charts";
 
 const chartConfig = {
   backgroundColor: "#ffffff",
@@ -35,6 +33,94 @@ const Dashboard = () => {
   const [translateX] = useState(new Animated.Value(0)); 
   const url = apiUrl;
   const navigation = useNavigation();
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [inventoryData, setInventoryData] = useState([]);
+  const [ordersData, setOrdersData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [pieChartData, setPieChartData] = useState([]);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${url}/inventory`);
+        setInventoryData(response.data.inventory);
+      } catch (error) {
+        console.error("Error fetching inventory data:", error);
+      }
+    };
+    const fetchOrdersData = async () => {
+      try {
+        const response = await fetch(`${url}/orders`);
+        const data = await response.json();
+        setOrdersData(data.data);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    };
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${url}/user`);
+        const users = response.data.data;
+        setUserData(users);
+      } catch (error) {
+        console.error('Error fetching user data:', error.message);
+      }
+    };
+  
+    const fetchDataInterval = setInterval(() => {
+      fetchData();
+      fetchOrdersData();
+      fetchUserData();
+    }, 10000);
+  
+    // Fetch initial data
+    fetchData();
+    fetchOrdersData();
+    fetchUserData();
+  
+    // Clean up interval
+    return () => clearInterval(fetchDataInterval);
+  }, []);
+  useEffect(() => {
+    // Group users by month and count the number of users in each group
+    const usersByMonth = userData.reduce((acc, user) => {
+      const createdDate = new Date(user.createdAt);
+      const month = createdDate.getMonth() + 1; // Months are zero-based (0 = January)
+      const year = createdDate.getFullYear();
+      const key = `${month}-${year}`;
+
+      acc[key] = (acc[key] || 0) + 1;
+
+      return acc;
+    }, {});
+
+    // Prepare data for pie chart
+    const pieChartData = Object.keys(usersByMonth).map(key => {
+      const [month, year] = key.split('-');
+      const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'long' });
+      return {
+        name: monthName, // Change 'month' to 'name'
+        count: usersByMonth[key],
+        color: `#${Math.floor(Math.random()*16777215).toString(16)}` // Generate random color
+      };
+    });
+    
+    setPieChartData(pieChartData);
+  }, [userData]);
+
+  const calculateOrdersByMonth = () => {
+    const currentYear = new Date().getFullYear();
+    const ordersByMonth = Array.from({ length: 12 }, (_, index) => {
+      const month = index + 1;
+      const monthName = new Date(currentYear, month - 1, 1).toLocaleString('default', { month: 'long' });
+      const count = ordersData.filter(order => new Date(order.createdAt).getMonth() === index).length;
+      return { month: monthName, count: count };
+    });
+    return ordersByMonth;
+  };
+
+  const ordersByMonth = calculateOrdersByMonth();
 
   const closeDrawer = () => {
     // Assuming you have a state variable to track the drawer state, 
@@ -67,6 +153,7 @@ const Dashboard = () => {
     width: 200,
     zIndex: 2,
   };
+ 
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
@@ -86,11 +173,21 @@ const Dashboard = () => {
       console.log("Error occurred while logging out:", error);
     }
   };
+  const handleItemClick = (item) => {
+    setSelectedItem(item.month);
+    console.log(selectedItem) // Set the selected month when clicked
+  };
+
+  const clearSelectedItem = () => {
+    setSelectedItem(null); // Clear the selected item
+  };
+
+
   return (
     <SafeAreaView
     style={{
       alignSelf: "stretch",
-      paddingTop: Platform.OS === "android" ? 10 : 0,
+      paddingTop: 0,
       flex: 1,
       backgroundColor: "#FFE4B5",
     }}
@@ -160,28 +257,132 @@ const Dashboard = () => {
             </View>
           </ImageBackground>
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Admin Dashboard</Text>
+      {/* <Text>Admin Dashboard</Text> */}
 
-      <View style={{ marginTop: 20 }}>
-        <BarChart
-          data={data}
-          width={350}
-          height={220}
-          yAxisLabel="$"
-          chartConfig={chartConfig}
-          verticalLabelRotation={30}
+      <View style={styles.container}>
+        <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 15 }}>
+          Inventory
+        </Text>
+        <StackedBarChart
+          containerHeight={300}
+          backgroundColor="gray"
+          axisFontColor="white"
+          yAxisSubstring=""
+          xAxisSubstring=""
+          showGridY={true}
+          axisWidth={2}
+          axisColor="white"
+      barchart_tooltip_color="white"
+      barchart_tooltip_axis_color="white"
+          showGrid={false}
+          axisFontSize={5}
+          chartType={ChartType.BAR}
+          y2Axis={false}
+          chartData={inventoryData.map((item) => ({
+            month: item.name,
+            barValues: [item.stocks],
+          }))}
+          toolTipContainerStyle={{ backgroundColor: 'black' }}
+          toolTipTextStyle={{color:'white'}}
+          showTooltipPopup={true} // Enable tooltip
+          onPressLineItem={(item) => handleItemClick(item)}
+          scrollEnable={true}
+        />
+      
+      {/* </View> */}
+
+      {/* <View style={styles.container}> */}
+        <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 10 }}>
+          Orders
+        </Text>
+        <ScrollView horizontal>
+      <View>
+        <LineChart
+          data={{
+            labels: ordersByMonth.map(month => `${month.month}=${month.count}`),
+            datasets: [
+              {
+                data: ordersByMonth.map(month => month.count),
+              },
+            ],
+          }}
+          width={ordersByMonth.length * 90} 
+          height={300}
+          yAxisSuffix=""
+          chartConfig={{
+            backgroundGradientFrom: 'black',
+            backgroundGradientTo: 'black',
+            decimalPlaces: 0,
+            // color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            color: (opacity = 1) => "green",
+            labelColor: (opacity = 1) => "white",
+            propsForDots: {
+              r: "4",
+              strokeWidth: "1",
+              stroke: "white"
+            }
+          }}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16
+          }}
         />
       </View>
-    </View>
+    </ScrollView>
+      </View>
+      </View>
+      
+      <ScrollView>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 10 }}>
+          User Accounts
+        </Text>
+      <PieChart
+  data={pieChartData}
+  width={350}
+  height={220}
+  chartConfig={{
+    backgroundGradientFrom: '#ffffff',
+    backgroundGradientTo: '#ffffff',
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  }}
+  accessor="count" // Update to "count"
+  backgroundColor="transparent"
+  paddingLeft="15"
+  absolute
+  accessorTooltip={(value, index) => pieChartData[index].name} // Access the 'name' property
+/>
+
+<View style={styles.tableContainer}>
+  <View style={styles.header}>
+    <Text style={styles.headerTextt}>Month</Text>
+    <Text style={styles.headerText}>Users</Text>
+  </View>
+  <FlatList
+    data={pieChartData}
+    keyExtractor={(item, index) => index.toString()}
+    renderItem={({ item }) => (
+      <View style={styles.row}>
+        <Text style={styles.cell}>{item.name}</Text>
+        <Text style={styles.cell}>{item.count}</Text>
+      </View>
+    )}
+  />
+</View>
+</View>
+    </ScrollView>
+      
+
     </ScrollView>
     <Animated.View
   style={[
     drawerStyles,
     {
-      transform: [{ translateX }], // Apply translation animation
+      transform: [{ translateX }], 
       display: isDrawerOpen ? "flex" : "none", 
       backgroundColor: "#4c4436",
-       // Hide/show the drawer
+      
     },
   ]}
 >
@@ -190,7 +391,7 @@ const Dashboard = () => {
   <Pressable
     style={{
       position: "absolute",
-      top: 20,
+      top: 10,
       left: 0,
       flexDirection: "row",
       alignItems: "center",
@@ -208,7 +409,7 @@ const Dashboard = () => {
   <ImageBackground
             source={require("../../../assets/bg.png")}
             style={{ flex: 1, position: 'absolute',
-            top: 54,
+            top: 44,
             left: 0,
             right: 0,
           height: 123 }}
@@ -256,7 +457,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 10, // Adjust the height to control how much of the drawer is cut
+    height:0, // Adjust the height to control how much of the drawer is cut
     backgroundColor: '#FFE4B5', // Semi-transparent black color
   },
   drawerItemContainer: {
@@ -282,5 +483,53 @@ const styles = StyleSheet.create({
     zIndex: 999, // Adjust z-index as needed
     paddingHorizontal: 7, // Adjust padding as needed
     paddingVertical: 9, // Adjust padding as needed
+  },container: {
+    flex: 1,
+    backgroundColor: "#FFE4B5",
+    alignItems: "center",
+    justifyContent: "center",
+  
+    // marginTop: 60,
+  },
+  tableContainer: {
+    flex: 1,
+    width:300,
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 5,
+    marginHorizontal: 20,
+    marginTop: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Change justifyContent to space-between
+
+    backgroundColor: '#f0f0f0',
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+},
+  headerText: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginRight:40
+  },
+  headerTextt: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginLeft:37
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  cell: {
+    flex: 1,
+    textAlign: 'center',
   },
 });

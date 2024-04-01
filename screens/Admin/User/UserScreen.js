@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState,useEffect } from "react";
 import {
   View,
   SafeAreaView,
@@ -14,27 +14,38 @@ import { DataTable } from "react-native-paper";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
 import { MaterialIcons } from "@expo/vector-icons";
-import MunchiesItems from "./Items";
+import UserItems from "./Items";
 import { useNavigation } from "@react-navigation/native";
 import {apiUrl} from "../../../ip"
+
 var { width } = Dimensions.get("window");
 
-const MunchiesScreen = () => {
+const UserScreen = () => {
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const url = apiUrl
-  const getAllMunchies = async () => {
-    const { data } = await axios.get(`${url}/munchies`);
-    setItems(data.munchies);
-    setFilteredItems(data.munchies); // Set filtered items initially to all items
+  const getAllUser = async () => {
+    try {
+      const { data } = await axios.get(`${url}/user`);
+      setItems(data.data);
+      setFilteredItems(data.data); // Set filtered items initially to all items
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      getAllMunchies();
-    }, [])
-  );
+  // Call getAllUser initially and every 10 seconds
+  useEffect(() => {
+    getAllUser(); // Call initially
+
+    const intervalId = setInterval(() => {
+      getAllUser(); // Call every 10 seconds
+    }, 10000);
+
+    // Cleanup function to clear the interval when component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleSearch = (keyword) => {
     const regex = new RegExp(keyword, "i");
@@ -42,7 +53,7 @@ const MunchiesScreen = () => {
     setFilteredItems(filteredItems);
   };
   const handleRefreshAfterDelete = async () => {
-    await getAllMunchies(); // Refresh data after deletion
+    await getAllUser(); // Refresh data after deletion
   };
   return (
     <SafeAreaView
@@ -74,27 +85,7 @@ const MunchiesScreen = () => {
         </ImageBackground>
         <View>
           <Box style={{ with: width / 2.5 }}>
-            <Button
-              variant={"outline"}
-              size={"xs"}
-              marginTop={30}
-              borderColor={"black"}
-              onPress={() => navigation.navigate("MunchiesCreate")}
-              style={{
-                alignSelf: "center", // Center the button horizontally
-                width: "80%", // Set the width to 80%
-                marginTop: 10, // Add margin top for spacing
-              }}
-            >
-              <MaterialIcons
-                name="restaurant"
-                size={24}
-                color="black"
-                style={{ alignSelf: "center", marginRight: 5 }}
-              />{" "}
-              {/* Adjust styles for icon */}
-              <Text color={"black"}>Add New Munchies</Text>
-            </Button>
+        
             <Input
               onChangeText={(value) => handleSearch(value)}
               width={"95%"}
@@ -111,20 +102,16 @@ const MunchiesScreen = () => {
               }
             />
           </Box>
-          <DataTable style={{ margin: 0, padding: 0 }}>
+          <DataTable style={{}}>
             <DataTable.Header borderColor={"black"}>
-              <DataTable.Title>    Images</DataTable.Title>
-              <DataTable.Title>   Name</DataTable.Title>
-          
-
-             
-              <DataTable.Title>    Category</DataTable.Title>
-              <DataTable.Title>      Action</DataTable.Title>
+              <DataTable.Title>    Name</DataTable.Title>
+              <DataTable.Title>      Email</DataTable.Title>
+              <DataTable.Title>                Action</DataTable.Title>
             </DataTable.Header>
             <View style={{ maxHeight: "100%" }}>
               <ScrollView>
                 {filteredItems.map((item, i) => (
-                  <MunchiesItems
+                  <UserItems
                     item={item}
                     key={i}
                     handleDelete={() => handleDelete(item._id)}
@@ -140,4 +127,4 @@ const MunchiesScreen = () => {
   );
 };
 
-export default MunchiesScreen;
+export default UserScreen;

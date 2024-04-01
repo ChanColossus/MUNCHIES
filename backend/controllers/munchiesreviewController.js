@@ -27,7 +27,7 @@ exports.create = async (req, res) => {
 // Get all reviews
 exports.get = async (req, res) => {
   try {
-    const reviews = await MunchiesReview.find();
+    const reviews = await MunchiesReview.find().populate('Munchies');
     res.status(200).json({ success: true, data: reviews });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

@@ -95,21 +95,24 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userName = await AsyncStorage.getItem("name");
         const userId = await AsyncStorage.getItem("userId");
         const role = await AsyncStorage.getItem("role");
-        setUserName(userName);
         setUserRole(role);
-        const keys = await AsyncStorage.getAllKeys();
-        console.log("Keys in AsyncStorage:", keys);
 
-        // Use Axios instead of fetch
-        const response = await axios.get(
-          `${url}/orders/${userId}`
-        );
-        setUserOrders(response.data.orders);
-        console.log(userOrders);
-        console.log(role);
+        const fetchData = async () => {
+          const response = await axios.get(`${url}/orders/${userId}`);
+          setUserOrders(response.data.orders);
+        };
+
+        fetchData();
+
+        // Refresh every 3 seconds
+        const interval = setInterval(() => {
+          fetchData();
+        }, 3000);
+
+        return () => clearInterval(interval); // Clean up interval
+
       } catch (error) {
         console.log("Error fetching user data:", error);
       }
@@ -152,7 +155,7 @@ const HomeScreen = () => {
     <SafeAreaView
       style={{
         alignSelf: "stretch",
-        paddingTop: Platform.OS === "android" ? 10 : 0,
+        paddingTop: 30,
         flex: 1,
         backgroundColor: "#FFE4B5",
       }}
@@ -228,7 +231,7 @@ const HomeScreen = () => {
                   style={{
                     fontSize: 20,
                     fontWeight: "bold",
-                    fontFamily: "Roboto-Bold",
+                    
                     color: "#FFF6E0",
                     marginTop: 10,
                   }}
@@ -312,7 +315,7 @@ const HomeScreen = () => {
   <Pressable
     style={{
       position: "absolute",
-      top: 20,
+      top: 40,
       left: 0,
       flexDirection: "row",
       alignItems: "center",
@@ -330,7 +333,7 @@ const HomeScreen = () => {
   <ImageBackground
             source={require("../assets/bg.png")}
             style={{ flex: 1, position: 'absolute',
-            top: 54,
+            top: 74,
             left: 0,
             right: 0,
           height: 123 }}
@@ -388,12 +391,12 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 10, // Adjust the height to control how much of the drawer is cut
+    height: 30, // Adjust the height to control how much of the drawer is cut
     backgroundColor: '#FFE4B5', // Semi-transparent black color
   },
   drawerItemContainer: {
     position: 'absolute',
-    top: 220,
+    top: 250,
     left: 0,
     right: 0,
     paddingBottom: 10,
@@ -449,7 +452,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 10,
     fontWeight: "bold",
-    fontFamily: "Roboto-Bold",
+  
     color: "#3B2F2F", // Text color inside the container
   },
   containertable: {
@@ -463,7 +466,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     fontWeight: "bold",
-    fontFamily: "Roboto-Bold",
+
     marginTop: 40,
   },
   row: {

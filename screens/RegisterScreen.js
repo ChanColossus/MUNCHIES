@@ -17,6 +17,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import {apiUrl} from "../ip"
+import Google from "./Google"
 
 
 const RegisterScreen = () => {
@@ -221,7 +222,7 @@ const RegisterScreen = () => {
             Register
           </Text>
         </Pressable>
-
+            {/* <Google/> */}
         <Pressable onPress={() => navigation.goBack()} style={{ marginTop: 5 }}>
           <Text
             style={{

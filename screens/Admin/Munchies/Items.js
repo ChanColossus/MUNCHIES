@@ -68,7 +68,7 @@ export default function MunchiesItems({ item, refreshAfterDelete }) {
   const cellStyle = { fontSize: 10 };
   return (
     <>
-      <DataTable.Row style={{ paddingVertical: 5, paddingHorizontal:5,marginLeft:15 }}>
+      <DataTable.Row style={{ paddingVertical: 5, paddingHorizontal:5,marginLeft:20 }}>
         <Box style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity onPress={handlePreviousImage}>
             <MaterialIcons name="keyboard-arrow-left" size={24} color="black" />
@@ -104,7 +104,7 @@ export default function MunchiesItems({ item, refreshAfterDelete }) {
      
         {/* Remove this cell as it's not necessary to display all images */}
         {/* <DataTable.Cell>{item.images}</DataTable.Cell> */}
-        <DataTable.Cell style={{marginRight:20}}>{item.category}</DataTable.Cell>
+        <DataTable.Cell>{item.category}</DataTable.Cell>
         <DataTable.Cell>
           <TouchableOpacity onPress={handleEdit}>
             <MaterialIcons name="edit" size={24} color="blue" />

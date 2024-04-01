@@ -6,6 +6,7 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 
 import HomeScreen from "../screens/HomeScreen";
+import Reset from "../screens/resetPassword";
 import CartScreen from "../screens/CartScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
@@ -31,6 +32,7 @@ import Review from "../screens/CreateReview";
 import MunchiesReviews from "../screens/Admin/Munchies/Review"
 import BevviesReviews from "../screens/Admin/Bevvies/Review"
 import Location from "../screens/StoreLocation";
+import UserScreen from "../screens/Admin/User/UserScreen"
 
 const AdminNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -164,6 +166,21 @@ const AdminNavigator = () => {
               ),
           }}
         />
+         <Tab.Screen
+          name="User"
+          component={UserScreen}
+          options={{
+            tabBarLabel: "User",
+            tabBarLabelStyle: { color: "black",fontSize:5 },
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <MaterialIcons name="person" size={18} color="black" />
+              ) : (
+                <MaterialIcons name="person" size={18} color="black" />
+              ),
+          }}
+        />
       </Tab.Navigator>
     );
   }
@@ -249,6 +266,12 @@ const AdminNavigator = () => {
 <Stack.Screen
           name="Profile"
           component={Profile}
+          options
+          ={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForgotPass"
+          component={Reset}
           options={{ headerShown: false }}
         />
         <Stack.Screen

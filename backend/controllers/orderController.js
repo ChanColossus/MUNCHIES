@@ -34,7 +34,7 @@ exports.checkout = async (req, res) => {
         <body>
             <h1>New Order Confirmation</h1>
             <p>A new order has been placed. Please click the button below to confirm:</p>
-            <a href="http://192.168.0.130:8000/confirm-order/${order._id}" style="background-color: #4CAF50; color: white; padding: 15px 25px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;">Confirm Order</a>
+            <a href="http://192.168.0.143:8000/confirm-order/${order._id}" style="background-color: #4CAF50; color: white; padding: 15px 25px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;">Confirm Order</a>
         </body>
         </html>
       `,
@@ -81,9 +81,9 @@ exports.confirmOrder = async (req, res) => {
 
 exports.getOrdersByUser = async (req, res, next) => {
   try {
-    console.log(req.params.userId)
+   
     const orders = await Order.find({ user: req.params.userId });
-    console.log(orders);
+
     if (!orders) {
       return res.status(404).json({
         success: false,
@@ -102,7 +102,7 @@ exports.getOrdersByUser = async (req, res, next) => {
 exports.getOrders = async (req, res, next) => {
   try {
     const orders = await Order.find().populate('user');// Fetch all orders from the database
-console.log(orders)
+
     res.status(200).json({
       success: true,
       data: orders,

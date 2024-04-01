@@ -140,7 +140,8 @@ const CartScreen = () => {
     <SafeAreaView
       style={{
         alignSelf: "stretch",
-        paddingTop: Platform.OS === "android" ? 10 : 0,
+        paddingTop: 30,
+    
         flex: 1,
         backgroundColor: "#FFE4B5",
       }}
@@ -149,7 +150,7 @@ const CartScreen = () => {
       <View
             style={{
               backgroundColor: "rgba(0, 0, 0, 0.7)",
-              padding: 10,
+              paddingBottom: 40,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "flex-end", // Align items to the right
@@ -288,7 +289,7 @@ const CartScreen = () => {
   <Pressable
     style={{
       position: "absolute",
-      top: 20,
+      top: 40,
       left: 0,
       flexDirection: "row",
       alignItems: "center",
@@ -306,7 +307,7 @@ const CartScreen = () => {
   <ImageBackground
             source={require("../assets/bg.png")}
             style={{ flex: 1, position: 'absolute',
-            top: 54,
+            top: 70,
             left: 0,
             right: 0,
           height: 119 }}
@@ -366,12 +367,12 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 10, // Adjust the height to control how much of the drawer is cut
+    height: 30, // Adjust the height to control how much of the drawer is cut
     backgroundColor: '#FFE4B5', // Semi-transparent black color
   },
   drawerItemContainer: {
     position: 'absolute',
-    top: 220,
+    top: 250,
     left: 0,
     right: 0,
     paddingBottom: 10,
