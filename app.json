@@ -30,9 +30,17 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "eas": {
-        "projectId": "e076402b-3d02-4ce7-a9d7-85c692a8f7bb"
+      
+    
+        "eas": {
+          "build": {
+            "releaseChannel": "default",
+            "distribution": "apk"
+          }
+        }
+  
       }
-    }
+    },
+    "owner": "christianq07"
   }
-}
+
