@@ -21,10 +21,18 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.MandB.app",
+      "publishBundlePath": "android/app/build/outputs/bundle/release/app.aab",
+      "publishManifestPath": "android/app/build/outputs/apk/release/app.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e076402b-3d02-4ce7-a9d7-85c692a8f7bb"
+      }
     }
   }
 }
