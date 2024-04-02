@@ -25,6 +25,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "eas": {
+          "build": {
+            "releaseChannel": "default",
+            "distribution": "apk"
+          }
+        }
+  
+      }
+    },
+    "owner": "christianq07"
   }
 }
