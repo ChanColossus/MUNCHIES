@@ -182,6 +182,10 @@ const Profile = () => {
     navigation.navigate(screenName);
     closeDrawer();
   };
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value)
+   
+  };
   const handleAdmin = async () => {
     navigation.navigate("AdminMain");
   }
